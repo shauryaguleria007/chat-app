@@ -24,6 +24,6 @@ exports.login = AsyncErrorHandler(async (req, res, next) => {
 })
 
 exports.authenticate = AsyncErrorHandler(async (req, res, next) => {
-  res.json({ success: true })
+  res.json(req.user)
 })
 // send jwt
