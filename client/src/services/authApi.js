@@ -11,12 +11,12 @@ const authApi = createApi({
       query: () => '/authenticate',
       keepUnusedDataFor: 0.01,
     }),
-    // login: builder.mutation({
-    //   query: (payload) => ({ url: '/login', method: 'POST', payload }),
-    //   keepUnusedDataFor: 0.01,
-    // }),
+    login: builder.mutation({
+      query: (body) => ({ url: '/login', method: 'POST', body }),
+      keepUnusedDataFor: 0.01,
+    }),
   }),
 })
 
 export default authApi
-export const { useAuthenticateUserQuery } = authApi
+export const { useAuthenticateUserQuery, useLoginMutation } = authApi
