@@ -17,7 +17,7 @@ export const Verify = () => {
     useEffect(() => {
         if (data) setTimeout(() => {
             dispatch(setUser(data))
-            window.location.href = `${process.env.REACT_APP_CLIENT}`;
+            window.location.href = `${import.meta.env.VITE_CLIENT}`;
             return
         }, 2000)
     }, [data])
