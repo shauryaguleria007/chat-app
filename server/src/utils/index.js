@@ -1,4 +1,5 @@
 const AsyncErrorHandler = require('./asyncErrorHandler')
 const customError = require('./customError')
 const useJwtStrategy = require('./passport/jwt')
-module.exports = { AsyncErrorHandler, ...customError, useJwtStrategy }
+const verificationMail = require("./nodeMailer/verificationMail")
+module.exports = { AsyncErrorHandler, ...customError, useJwtStrategy, verificationMail }

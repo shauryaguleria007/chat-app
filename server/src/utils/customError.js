@@ -11,3 +11,21 @@ exports.credentialError = class extends Error {
     this.name = 'credential'
   }
 }
+
+
+exports.verificatoinError = class extends Error {
+  constructor(message) {
+    super(`${message}`)
+
+    this.name = 'verification'
+  }
+}
+
+
+exports.EmailerificatoinError = class extends Error {
+  constructor(message) {
+    super(`${message}`)
+
+    this.name = 'emailVerification'
+  }
+}
