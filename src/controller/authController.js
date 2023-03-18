@@ -1,5 +1,5 @@
 const User = require('../modal/userModal')
-const { AsyncErrorHandler, verificationMail, credentialError, customError, EmailerificatoinError } = require('../utils')
+const { AsyncErrorHandler, verificationMail, credentialError, customError, EmailerificatoinError ,reVerificatonError} = require('../utils')
 
 
 const jwt = require('jsonwebtoken')
@@ -45,6 +45,7 @@ exports.sendMail = AsyncErrorHandler(async (req, res, next) => {
 })
 
 exports.verify = AsyncErrorHandler(async (req, res, next) => {
+  if (req.user.verified) throw new reVerificatonError("")
   if (req.params.id === req.user.mailToken.token && (new Date) < req.user.mailToken.expiry) {
     req.user.verified = true
     await req.user.save()

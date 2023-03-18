@@ -21,6 +21,14 @@ exports.verificatoinError = class extends Error {
   }
 }
 
+exports.reVerificatonError = class extends Error {
+  constructor(message) {
+    super(`${message}`)
+
+    this.name = 'ReVerification'
+  }
+}
+
 
 exports.EmailerificatoinError = class extends Error {
   constructor(message) {
