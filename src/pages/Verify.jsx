@@ -17,7 +17,7 @@ export const Verify = () => {
     useEffect(() => {
         if (data) setTimeout(() => {
             dispatch(setUser(data))
-            window.location.href = 'http://localhost:5173/';
+            window.location.href = `${import.meta.env.VITE_CLIENT}`;
             return
         }, 2000)
     }, [data])
