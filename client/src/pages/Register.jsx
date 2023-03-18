@@ -2,24 +2,56 @@ import React from 'react'
 import { Stack, Card, TextField, Box, Button, FormControl, CardHeader, CardContent } from "@mui/material"
 import { maxWidth, padding } from '@mui/system'
 import { red } from '@mui/material/colors';
-import { Link } from "react-router-dom"
-import { useRef } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { useRef, useEffect, useState } from "react"
+import { useRegisterMutation } from "../services/userApi"
+import { Loading } from "../components/Loading"
 export const Register = () => {
+  const navigate = useNavigate()
   const email = useRef()
   const password = useRef()
   const name = useRef()
+  const [errors, setErrors] = useState({
+    email: false,
+    password: false
+  })
+
+  const [registerUser, { data, error, isLoading }] = useRegisterMutation()
+
+  useEffect(() => {
+    if (data?.token) {
+      localStorage.setItem("auth", data.token)
+      return navigate("/")
+    }
+  }, [data])
 
 
+  useEffect(() => {
+    if (error?.data?.type === "credential") setErrors((state) => {
+      return { ...state, password: true }
+    })
+
+    if (error?.data?.type === "duplicate") setErrors((state) => {
+      return { ...state, email: true }
+    })
+
+  }, [error])
 
   const handelSubmit = async (e) => {
     e.preventDefault()
+    const userCredentials = {
+      email: email.current.value,
+      password: password.current.value,
+      name: name.current.value
+    }
+    await registerUser(userCredentials)
 
   }
 
-  return <><Box height="100vh"
-
-    backgroundColor={red['A100']}
-    display={"flex"} alignItems="center" justifyContent={"space-around"}>
+  return <> <Box height="100vh"
+    // backgroundColor={red['A100']}
+    display={"flex"} alignItems="center" justifyContent={"space-around"}
+   >
     <Card
       sx={{
         borderRadius: 3,
@@ -38,6 +70,12 @@ export const Register = () => {
             type="email"
             required size='small'
             inputRef={email}
+            error={errors.email}
+            onFocus={() => setErrors((state) => {
+              email.current.value = ""
+              return { ...state, email: false }
+            })}
+            helperText={`${errors.email ? "This email is already registered ." : ""}`}
           />
 
           <TextField label="name"
@@ -50,6 +88,12 @@ export const Register = () => {
             required type="password"
             size="small"
             inputRef={password}
+            error={errors.password}
+            onFocus={() => setErrors((state) => {
+              password.current.value = ""
+              return { ...state, password: false }
+            })}
+            helperText={`${errors.password ? "invalid password formatt ." : ""}`}
           />
 
           <Box display={"flex"}
@@ -76,11 +120,11 @@ export const Register = () => {
       zIndex={100}
       width={"100vw"}
       position="absolute" top={0}
-      display={false ? "flex" : "none"}   //trigger with is loading after api call
+      display={isLoading ? "flex" : "none"}   //trigger with is loading after api call
       alignItems="center"
       justifyContent={"center"}
     >
-      <h1> Loading...</h1>
+      <Loading />
     </Box>
   </>
 }

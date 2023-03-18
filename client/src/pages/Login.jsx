@@ -3,14 +3,42 @@ import { Stack, Card, TextField, Box, Button, FormControl, CardHeader, CardConte
 import { maxWidth, padding } from '@mui/system'
 import { red } from '@mui/material/colors';
 import { Link } from "react-router-dom"
-import { useRef } from "react"
+import { useRef, useEffect, useState } from "react"
 import { useLoginMutation } from "../services/authApi"
+import { useNavigate } from "react-router-dom"
+import { Loading } from "../components/Loading"
+
+
+
+
 export const Login = () => {
   const email = useRef()
   const password = useRef()
-
+  const navigate = useNavigate()
 
   const [loginUser, { data, error, isLoading }] = useLoginMutation()
+
+  const [errors, setErrors] = useState({
+    email: false,
+    password: false
+  })
+
+  useEffect(() => {
+    if (data?.token) {
+      localStorage.setItem("auth", data.token)
+      return navigate("/")
+    }
+  }, [data])
+
+  useEffect(() => {
+    if (error?.data?.type === "password") setErrors((state) => {
+      return { ...state, password: true }
+    })
+
+    if (error?.data?.type === "credential") setErrors((state) => {
+      return { ...state, email: true }
+    })
+  }, [error])
 
   const handelSubmit = async (e) => {
     e.preventDefault()
@@ -18,21 +46,22 @@ export const Login = () => {
       email: email.current.value,
       password: password.current.value
     }
-    console.log(userCredentials)
     await loginUser(userCredentials)
   }
 
   return <>
     <Box height="100vh"
-      backgroundColor={red['A100']}
-      display={"flex"} alignItems="center" justifyContent={"space-around"}>
+      // backgroundColor={red['A100']}
+      display={"flex"} alignItems="center" justifyContent={"space-around"}
+   >
       <Card
         sx={{
           borderRadius: 3,
           padding: 4,
-          boxShadow: 12
+          boxShadow: 15,
         }
         }
+        
       >
         <CardHeader title="Welome to the chat app "
           subheader="please enter your account details "
@@ -44,13 +73,26 @@ export const Login = () => {
               type="email"
               required size='small'
               inputRef={email}
-              disabled={isLoading} />
+              disabled={isLoading}
+              error={errors.email}
+              helperText={errors.email ? "invalid email" : ""}
+              onFocus={() => setErrors((state) => {
+                email.current.value = ""
+                return { ...state, email: false }
+              })}
+            />
 
             <TextField label="password"
               required type="password"
               size="small"
               inputRef={password}
               disabled={isLoading}
+              error={errors.password}
+              helperText={errors.password ? "wrong password" : ""}
+              onFocus={() => setErrors((state) => {
+                password.current.value = ""
+                return { ...state, password: false }
+              })}
             />
 
             <Box display={"flex"}
@@ -84,7 +126,7 @@ export const Login = () => {
       alignItems="center"
       justifyContent={"center"}
     >
-      <h1> Loading...</h1>
+      <Loading />
     </Box>
   </>
 }
