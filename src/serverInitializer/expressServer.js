@@ -8,7 +8,7 @@ const { useJwtStrategy } = require('../utils')
 module.exports = (server) => {
   server.use(
     cors({
-      origin: [`${process.env.client}`, "http://localhost:5173"],
+      origin: [`${process.env.client}`,`${process.env.client2}` ],
       credentials: true,
       methods: ['GET', 'PUT', 'POST', 'OPTIONS'],
     })
