@@ -123,7 +123,7 @@ const VerifyEmail = () => {
         }
       </CardContent>
       {state.success ? <CardActions>
-        <LoadingButton fullWidth onClick={() => window.location.href = `${import.meta.env.VITE_CLIENT}`}>Resend email</LoadingButton>
+        <LoadingButton fullWidth onClick={() => window.location.href = `${process.env.VITE_CLIENT}`}>Resend email</LoadingButton>
 
       </CardActions> : ""}
     </Card>
