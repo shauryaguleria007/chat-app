@@ -23,6 +23,10 @@ export const Verify = () => {
     }, [data])
 
     useEffect(() => {
+        console.log(error);
+        if (error?.data?.type === "ReVerification") {
+            return navigate("/")
+        }
         if (error?.data?.type === "emailVerification") {
             Warning("your session has expired ,please resend mail", 5000)
             return navigate("/")
