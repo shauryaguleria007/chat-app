@@ -17,14 +17,14 @@ export const Verify = () => {
     useEffect(() => {
         if (data) setTimeout(() => {
             dispatch(setUser(data))
-            return navigate("/")
+            window.location.href = 'http://localhost:5173/';
+            return
         }, 2000)
     }, [data])
 
     useEffect(() => {
-        console.log(error)
         if (error?.data?.type === "emailVerification") {
-            Warning("your session has expired ,please resend mail",5000)
+            Warning("your session has expired ,please resend mail", 5000)
             return navigate("/")
         }
     }, [error])

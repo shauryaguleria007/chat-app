@@ -20,19 +20,21 @@ export const Authorizer = () => {
     setTimeout(() => { }, 2000)
     if (isError) {
       if (error?.data?.type === "verification") return
-      if (id) Warning("please login first ,then verify email through the recieved mail.",6000)
+      if (id) Warning("please login first ,then verify email through the recieved mail.", 6000)
       return navigate('/login')
     }
     if (data) {
+      console.log(data, error)
       dispatch(setUser(data))
     }
   }, [data, isError, error])
 
   if (isLoading) return <Loading />
   if (data) return <Outlet />
-  if (error?.data?.type === "verification")
+  if (error?.data?.type === "verification") {
     if (id) return <Verify />
     else return <VerifyEmail />
+  }
 
 }
 
@@ -121,13 +123,8 @@ const VerifyEmail = () => {
         }
       </CardContent>
       {state.success ? <CardActions>
-        <Link to="/" target={"_blank"}
-          style={
-            { textDecoration: "none" }
-          }
-        >
-          <LoadingButton fullWidth>Resend email</LoadingButton>
-        </Link>
+        <LoadingButton fullWidth onClick={() => window.location.href = 'http://localhost:5173/'}>Resend email</LoadingButton>
+
       </CardActions> : ""}
     </Card>
   </Box >

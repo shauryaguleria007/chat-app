@@ -15,7 +15,7 @@ const authApi = createApi({
   endpoints: (builder) => ({
     authenticateUser: builder.query({
       query: () => '/authenticate',
-      keepUnusedDataFor: 0.01,
+      keepUnusedDataFor: 0.001,
     }),
     sendMail: builder.query({
       query: (email) => `/verify/${email}`,
