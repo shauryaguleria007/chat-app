@@ -24,6 +24,7 @@ const connnectDatabase = async () => {
 connnectDatabase()
 
 expressServer(server)
+socketServer(httpServer)
 
 httpServer.listen(process.env.PORT, () => {
   console.log('server listening at port 3000')
