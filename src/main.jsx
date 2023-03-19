@@ -6,12 +6,13 @@ import { Provider } from 'react-redux'
 import { store } from './app/store'
 import { ComponentProvider } from "./contexrt/ComponentContect"
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={store}>
-     <ComponentProvider>
-     <App />
-     </ComponentProvider>
+      <ComponentProvider>
+          <App />
+      </ComponentProvider>
+
     </Provider>
 
-  </React.StrictMode>
+  // </React.StrictMode>
 )

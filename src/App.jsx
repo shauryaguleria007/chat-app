@@ -10,7 +10,7 @@ import { Authorizer } from './components/authorizer'
 import { Verify } from './pages/Verify'
 import { Alert } from "@mui/material"
 import { useComponentContext } from "./contexrt/ComponentContect"
-
+import { SocketProvider } from './contexrt/SocketContext'
 function App() {
   const { warning } = useComponentContext()
   return (
@@ -24,7 +24,8 @@ function App() {
       <BrowserRouter>
         <Routes >
           <Route path="/" element={<Authorizer />}>
-            <Route path='/' element={<Home />} />
+            <Route path='/' element={<SocketProvider><Home /></SocketProvider>
+            } />
             <Route path='/:id' element={<Verify />} />
           </Route>
           <Route path='/login' element={<Login />} />
