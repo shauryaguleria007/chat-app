@@ -2,10 +2,13 @@ require('dotenv').config()
 
 const express = require('express')
 const mongoose = require('mongoose')
+const http = require("http")
 
 const expressServer = require('./serverInitializer/expressServer')
+const socketServer = require("./serverInitializer/socketServer")
 
 const server = express()
+const httpServer = http.createServer(server)
 
 const connnectDatabase = async () => {
   const database = await mongoose
@@ -22,6 +25,6 @@ connnectDatabase()
 
 expressServer(server)
 
-server.listen(process.env.PORT, () => {
+httpServer.listen(process.env.PORT, () => {
   console.log('server listening at port 3000')
 })
