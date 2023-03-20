@@ -1,7 +1,7 @@
 const { Server } = require("socket.io")
 const passport = require("passport")
 const { useCustomStrategy } = require("../utils")
-
+const { getClientMessage } = require("./messageEvents")
 module.exports = (httpServer) => {
     const socketServer = new Server(httpServer, {
         cors: `${process.env.client}`
@@ -19,7 +19,10 @@ module.exports = (httpServer) => {
     })
     socketServer.on("connection", (socket) => {
         console.log(socket.request.user);
-        console.log("a user connected ")
+
+        socket.on("sendMessage",getClientMessage)
+
+
         socket.on("disconnect", () => {
             console.log("user disconnected");
         })
