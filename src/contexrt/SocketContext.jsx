@@ -3,7 +3,13 @@ import { io } from "socket.io-client";
 const SocketContext = createContext()
 
 export const SocketProvider = ({ children }) => {
-    console.log(children)
+    const [recieveMessage, setRecieveMessage] = useState({})
+
+
+    const recieveMessageFunction = (message) => {
+        console.log(message);
+    }
+
     const socket = io(`${import.meta.env.VITE_SERVER}`, {
         autoConnect: false,
         extraHeaders: {
@@ -16,7 +22,16 @@ export const SocketProvider = ({ children }) => {
         return () => socket.disconnect()
     }, [])
 
-    return <SocketContext.Provider value={{socket}}>
+    useEffect(() => {
+        socket.on("recieveMessage", recieveMessageFunction)
+        return () => { socket.off("recieveMessage", recieveMessageFunction) }
+    }, [])
+
+    const sendMessage = () => {
+        socket.emit("sendMessage", { user: "shaurya" })
+    }
+
+    return <SocketContext.Provider value={{ socket, sendMessage }}>
         {children}
     </SocketContext.Provider>
 }
