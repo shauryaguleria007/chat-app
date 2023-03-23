@@ -18,10 +18,10 @@ module.exports = (httpServer) => {
         next()
     })
     socketServer.on("connection", (socket) => {
-        console.log(socket.request.user);
+        console.log(socket.request.user.email);
 
-        socket.on("sendMessage",getClientMessage)
-
+        socket.on("sendMessage", (message) => getClientMessage(message, socket = socketServer))
+    
 
         socket.on("disconnect", () => {
             console.log("user disconnected");
