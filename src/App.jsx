@@ -11,6 +11,7 @@ import { Verify } from './pages/Verify'
 import { Alert } from "@mui/material"
 import { useComponentContext } from "./contexrt/ComponentContect"
 import { SocketProvider } from './contexrt/SocketContext'
+import { Chat } from "./pages/homeComponents/Chat"
 function App() {
   const { warning } = useComponentContext()
   return (
@@ -24,9 +25,10 @@ function App() {
       <BrowserRouter>
         <Routes >
           <Route path="/" element={<Authorizer />}>
-            <Route path='/' element={<SocketProvider><Home /></SocketProvider>
-            } />
-            <Route path='/:id' element={<Verify />} />
+            <Route path='/' element={<SocketProvider><Home /></SocketProvider>} >
+              <Route path="/:userChat" element={<Chat/>} />
+            </Route>
+            <Route path='email/:id' element={<Verify />} />
           </Route>
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />

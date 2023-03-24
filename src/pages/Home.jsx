@@ -1,16 +1,46 @@
 import React, { useEffect, useRef } from 'react'
-import { Link } from "react-router-dom"
-import { useSocketContext } from "../contexrt/SocketContext"
+import { Link, useParams } from "react-router-dom"
+import { Navbar } from './homeComponents/Navbar'
+import { Box, Stack } from '@mui/material'
+import { useSocketContext } from '../contexrt/SocketContext'
+import { Outlet } from "react-router-dom";
+import { Contacts } from "./homeComponents/Contacts"
 export const Home = () => {
-  const { socket ,sendMessage} = useSocketContext()
-  useEffect(() => {
-  }, [])
-  const message = () => {
-   sendMessage()
-  }
+  const { userChat } = useParams()
   return <>
-    <Link to="/logout">logout </Link>
-    <button onClick={message}>send message</button>
+    <Box  sx={{
+      height: "100vh",
+      width: "100vw",
+      
+    }}>
+    <Stack rowGap={1} sx={{
+      height: "100%",
+      width: "100%",
+      
+    }}>
+      <Navbar />
+      <Stack sx={{
+        height: "100%",
+        pb:1,
+        px:1
+      }}
+        direction="row"
+        gap={1}
+      >
+        <Contacts />
+        {userChat ? <Outlet /> : <DefaultView />}
+      </Stack>
+    </Stack>
+    </Box>
   </>
 
+}
+
+const DefaultView = () => {
+  return <Box sx={{
+    outline: "1px solid black",
+    width: "66.66%"
+  }}>
+    defaultView
+  </Box>
 }

@@ -1,10 +1,12 @@
 import { useContext, createContext, useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
+import { getUser } from "../app/store";
+
 const SocketContext = createContext()
 
 export const SocketProvider = ({ children }) => {
     const [recieveMessage, setRecieveMessage] = useState({})
-
+    const user = getUser()
 
     const recieveMessageFunction = (message) => {
         console.log(message);
@@ -27,8 +29,8 @@ export const SocketProvider = ({ children }) => {
         return () => { socket.off("recieveMessage", recieveMessageFunction) }
     }, [])
 
-    const sendMessage = () => {
-        socket.emit("sendMessage", { user: "shaurya" })
+    const sendMessage = (message) => {
+        socket.emit("sendMessage", { from: user.email, message })
     }
 
     return <SocketContext.Provider value={{ socket, sendMessage }}>

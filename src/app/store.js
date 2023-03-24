@@ -15,4 +15,6 @@ export const store = configureStore({
 
 })
 
-export const getUser = () => useSelector((state) => state.user)
+export const getUser = () => {
+  return useSelector((state) => state.userSlice.user)
+}
