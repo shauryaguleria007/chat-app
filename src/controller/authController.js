@@ -28,7 +28,8 @@ exports.authenticate = AsyncErrorHandler(async (req, res, next) => {
   res.json({
     email: req.user.email,
     name: req.user.name,
-    id: req.user.id
+    id: req.user.id,
+    avatarUrl:req.user.avatarUrl
   })
 })
 

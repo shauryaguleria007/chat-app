@@ -1,6 +1,9 @@
 const socketServer = require("./socketServer")
 
-exports.getClientMessage = (message, socket) => {
-    socket.emit("recieveMessage",{...message,test:Math.random()})
+exports.getClientMessage = async (message, socket, redisClient) => {
+    await redisClient.sAdd(`${message.from}`, JSON.stringify(message), () => {
+        console.log("message cashed");
+    })
+    socket.emit("recieveMessage", { ...message })
 }
 

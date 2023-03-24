@@ -1,11 +1,24 @@
 const { Server } = require("socket.io")
 const passport = require("passport")
+const redis = require("redis")
+
 const { useCustomStrategy } = require("../utils")
 const { getClientMessage } = require("./messageEvents")
-module.exports = (httpServer) => {
+module.exports = async (httpServer) => {
     const socketServer = new Server(httpServer, {
         cors: `${process.env.client}`
     })
+
+    const redisClient = redis.createClient()
+    redisClient.on("connect", () => {
+        console.log("redis client connected");
+    })
+    redisClient.on("error", (error) => {
+        console.log(error);
+    })
+
+    await redisClient.connect()
+
 
     const wrapMiddlewareForSocketIo = middleware => (socket, next) => middleware(socket.request, {}, next);
     useCustomStrategy(passport)
@@ -20,8 +33,8 @@ module.exports = (httpServer) => {
     socketServer.on("connection", (socket) => {
         console.log(socket.request.user.email);
 
-        socket.on("sendMessage", (message) => getClientMessage(message, socket = socketServer))
-    
+        socket.on("sendMessage", (message) => getClientMessage(message, socketServer,redisClient))
+
 
         socket.on("disconnect", () => {
             console.log("user disconnected");
