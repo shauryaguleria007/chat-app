@@ -23,8 +23,9 @@ exports.createUser = AsyncErrorHandler(async (req, res, next) => {
 
 
 exports.findUser = AsyncErrorHandler(async (req, res, next) => {
-  const result =  await User.find({ email: req.body.id }).select("-mailToken")
-  console.log(result);
-  
-  res.json(result)
+  const result = await User.find({ email: req.body.id }).select("-mailToken")
+  if (result.length === 0) throw new verificatoinError("")
+  const resu = [...result, ...result, ...result, ...result, ...result, ...result, ...result, ...result, ...result, ...result, ...result, ...result]
+
+  res.json(resu)
 })
