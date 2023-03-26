@@ -7,30 +7,35 @@ import { Outlet } from "react-router-dom";
 import { Contacts } from "./homeComponents/Contacts"
 export const Home = () => {
   const { userChat } = useParams()
+  const { setShowContacts } = useSocketContext()
+  useEffect(() => {
+    if (!userChat) setShowContacts(true)
+    else setShowContacts(false)
+  }, [userChat])
   return <>
-    <Box  sx={{
+    <Box sx={{
       height: "100vh",
       width: "100vw",
-      
+
     }}>
-    <Stack rowGap={1} sx={{
-      height: "100%",
-      width: "100%",
-      
-    }}>
-      <Navbar />
-      <Stack sx={{
+      <Stack rowGap={1} sx={{
         height: "100%",
-        pb:1,
-        px:1
-      }}
-        direction="row"
-        gap={1}
-      >
-        <Contacts />
-        {userChat ? <Outlet /> : <DefaultView />}
+        width: "100%",
+
+      }}>
+        <Navbar />
+        <Stack sx={{
+          height: "100%",
+          pb: 1,
+          px: 1
+        }}
+          direction="row"
+          gap={1}
+        >
+          <Contacts />
+          {userChat ? <Outlet /> : <DefaultView />}
+        </Stack>
       </Stack>
-    </Stack>
     </Box>
   </>
 
@@ -39,7 +44,11 @@ export const Home = () => {
 const DefaultView = () => {
   return <Box sx={{
     outline: "1px solid black",
-    width: "66.66%"
+    width: "66.66%",
+    display: {
+      xs: "none",
+      sm: "flex"
+    }
   }}>
     defaultView
   </Box>

@@ -24,7 +24,6 @@ export const Authorizer = () => {
       return navigate('/login')
     }
     if (data) {
-      console.log(data);
       dispatch(setUser(data))
     }
   }, [data, isError, error])

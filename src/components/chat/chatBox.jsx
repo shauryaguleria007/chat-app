@@ -6,6 +6,7 @@ export const ChatBox = () => {
       outline: "1px solid black",
       width: "100%",
       height:"85%"
+   
     }}>
       chat box
     </Box>

@@ -5,6 +5,7 @@ const authApi = createApi({
         baseUrl: `${import.meta.env.VITE_SERVER}/api/v1/user`,
         withCredentials: true,
         credentials: 'include',
+        keepUnusedDataFor: 0.001,
         prepareHeaders: (Headers) => {
             const token = localStorage.getItem("auth")
             if (!token) return Headers
@@ -19,10 +20,16 @@ const authApi = createApi({
                 method: "POST",
                 body
             }),
-            keepUnusedDataFor: 0.01
+        }),
+        findUser: builder.mutation({
+            query: (body) => ({
+                url: `/findUser`,
+                method: "POST",
+                body
+            })
         })
     }),
 })
 
 export default authApi
-export const { useRegisterMutation } = authApi
+export const { useRegisterMutation, useFindUserMutation } = authApi
