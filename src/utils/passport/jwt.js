@@ -12,7 +12,7 @@ module.exports = (passport) => {
 
   passport.use(
     new JwtStrategy(opts, async (jwt_payload, done) => {
-      const user = await User.findById(jwt_payload.id).catch((error) => {
+      const user = await User.findById(jwt_payload.id).select(["+mailToken","+verified"]).catch((error) => {
         return done(null, false)
       })
       if (user) return done(null, user)

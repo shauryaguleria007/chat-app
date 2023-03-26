@@ -12,3 +12,11 @@ module.exports = {
     }
 }
 
+// module.exports ={
+//     host: 'smtp.ethereal.email',
+//     port: 587,
+//     auth: {
+//         user: 'carmella52@ethereal.email',
+//         pass: '3RuuqhVEUkHzMN8QD4'
+//     }
+// }

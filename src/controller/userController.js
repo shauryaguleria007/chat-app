@@ -1,5 +1,5 @@
 const User = require('../modal/userModal')
-const { AsyncErrorHandler, customError } = require('../utils')
+const { AsyncErrorHandler, customError, verificatoinError } = require('../utils')
 const jwt = require("jsonwebtoken")
 
 exports.createUser = AsyncErrorHandler(async (req, res, next) => {
@@ -19,4 +19,12 @@ exports.createUser = AsyncErrorHandler(async (req, res, next) => {
   res.status(200).send({
     token: 'Bearer ' + token,
   })
+})
+
+
+exports.findUser = AsyncErrorHandler(async (req, res, next) => {
+  const result =  await User.find({ email: req.body.id }).select("-mailToken")
+  console.log(result);
+  
+  res.json(result)
 })

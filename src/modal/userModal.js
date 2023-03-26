@@ -5,14 +5,15 @@ const userSchema = new mongoose.Schema({
   email: { unique: true, type: mongoose.Schema.Types.String, required: [true] },
   name: { type: String, required: true },
   password: { type: String, select: false },
-  verified: { type: Boolean, default: false },
+  verified: { type: Boolean, default: false ,select: false},
   mailToken: {
     token: {
       type: String
     },
     expiry: {
       type: Date
-    }
+    },
+    select: false
   },
   avatarUrl: {
     type: String,

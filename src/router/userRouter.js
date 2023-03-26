@@ -1,8 +1,9 @@
 const express = require('express')
 const { check } = require('express-validator')
 
-const { createUser } = require('../controller')
+const { createUser, findUser } = require('../controller')
 const { routeValidator } = require('../middleware')
+const passport = require("passport")
 
 const Router = express.Router()
 
@@ -15,5 +16,7 @@ Router.route('/register').post(
   routeValidator,
   createUser
 )
+
+Router.route("/findUser").post(passport.authenticate("jwt", { session: false }), findUser)
 
 module.exports = Router
