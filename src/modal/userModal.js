@@ -23,7 +23,6 @@ const userSchema = new mongoose.Schema({
 
 userSchema.methods.addToken = async function () {
   const token = crypto.randomBytes(64).toString('hex')
-
   const date = new Date
   const expiry = new Date((new Date).getTime() + 10 * 6000)
   this.mailToken = {
