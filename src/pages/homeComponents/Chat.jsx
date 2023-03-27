@@ -14,7 +14,7 @@ export const Chat = () => {
       },
       display: {
         xs: `${showContacts ? "none" : "flex"}`,
-        sm:"flex"
+        sm: "flex"
       }
     }}>
       <Stack rowGap={1} sx={{

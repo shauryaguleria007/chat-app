@@ -108,7 +108,7 @@ export const Navbar = () => {
                 width: "100%",
                 "& ::-webkit-scrollbar": {
                     display: "none"
-                }
+                },
             }}
             id="search"
         >
@@ -116,19 +116,24 @@ export const Navbar = () => {
                 py: 2,
                 px: 3,
                 height: "100%",
-                overflowY: "scroll",
+                // overflowY: "scroll",
 
             }} elevation={9}>
                 <CardHeader title={error ? "" : "Results for"} subheader={error ? "" : `${chatUser?.current?.value}`} />
-                <CardContent>
+                <Box sx={{
+                    overflowY: "scroll",
+                    height: "50vh",
+                    mb: 2
+                }}>     <CardContent>
 
-                    {(data) ? <Stack gap={1}>
-                        {data.map((res, index) => {
-                            return <SearchComponent key={index} res={res} />
-                        })}
+                        {(data) ? <Stack gap={1}>
+                            {data.map((res, index) => {
+                                return <SearchComponent key={index} res={res} />
+                            })}
 
-                    </Stack> : null}
-                    {error ? "no user found with given credentials " : ''}</CardContent></Card>
+                        </Stack> : null}
+                        {error ? "no user found with given credentials " : ''}</CardContent></Box>
+            </Card>
         </Box>
     </>
 }
@@ -151,9 +156,10 @@ const SearchComponent = ({ res }) => {
         py: 1,
         mx: "auto",
         width: 300,
+        zIndex:"tooltip"
         // backgroundColor: blueGrey["A400"],
-
     }}
+    
     >
         <Stack direction={"row"} sx={{
             gap: {

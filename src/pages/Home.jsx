@@ -30,13 +30,13 @@ export const Home = () => {
 
     }}>
       <Stack rowGap={1} sx={{
-        height: "100%",
-        width: "100%",
+        height: 1,
+        width: 1,
 
       }}>
-        <Navbar />
+        <Navbar/>
         <Stack sx={{
-          height: "100%",
+          height: 1,
           pb: 1,
           px: 1
         }}
