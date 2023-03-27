@@ -29,7 +29,8 @@ exports.authenticate = AsyncErrorHandler(async (req, res, next) => {
     email: req.user.email,
     name: req.user.name,
     id: req.user.id,
-    avatarUrl:req.user.avatarUrl
+    avatarUrl:req.user.avatarUrl,
+    contacts:req.user.contacts
   })
 })
 

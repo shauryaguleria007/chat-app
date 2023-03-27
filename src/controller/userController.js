@@ -1,7 +1,7 @@
 const User = require('../modal/userModal')
 const { AsyncErrorHandler, customError, verificatoinError } = require('../utils')
 const jwt = require("jsonwebtoken")
-
+const mongoose = require("mongoose")
 exports.createUser = AsyncErrorHandler(async (req, res, next) => {
   const { email, password, name } = req.body
 
@@ -28,4 +28,15 @@ exports.findUser = AsyncErrorHandler(async (req, res, next) => {
   const resu = [...result, ...result, ...result, ...result, ...result, ...result, ...result, ...result, ...result, ...result, ...result, ...result]
 
   res.json(resu)
+})
+
+
+exports.addContact = AsyncErrorHandler(async (req, res, next) => {
+  const user = await User.findById(new mongoose.Types.ObjectId(req.body.id)).select(["-contacts", "-mailToken"])
+  req.user.contacts.map((id) => {
+    if (user.id === id.id) throw new verificatoinError("")
+  })
+  req.user.contacts.push(user)
+  await req.user.save()
+  res.json({ user })
 })
