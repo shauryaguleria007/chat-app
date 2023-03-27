@@ -18,3 +18,7 @@ export const store = configureStore({
 export const getUser = () => {
   return useSelector((state) => state.userSlice.user)
 }
+
+export const getContacts = () => {
+  return useSelector((state) => state.userSlice.contacts)
+}

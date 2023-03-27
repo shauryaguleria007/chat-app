@@ -29,10 +29,18 @@ const authApi = createApi({
                 body
             }),
             keepUnusedDataFor: 20,
+        }),
+        addContact: builder.mutation({
+            query: (body) => ({
+                url: "/addContact",
+                method: "POST",
+                body
+            }),
+            keepUnusedDataFor: 0.001
 
         })
     }),
 })
 
 export default authApi
-export const { useRegisterMutation, useFindUserMutation } = authApi
+export const { useRegisterMutation, useFindUserMutation, useAddContactMutation } = authApi

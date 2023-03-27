@@ -1,8 +1,11 @@
-import React from 'react'
-import { Box } from '@mui/material'
+import React, { useEffect } from 'react'
+import { Box, Stack } from '@mui/material'
 import { useSocketContext } from '../../contexrt/SocketContext'
+import { getContacts } from '../../app/store'
 export const Contacts = () => {
   const { showContacts } = useSocketContext()
+  const contacts = getContacts()
+
   return (
     <Box sx={{
       outline: "1px solid black",
@@ -15,7 +18,11 @@ export const Contacts = () => {
         sm: "flex"
       }
     }}>
-      contacts
+      <Stack>
+        {contacts?.map((res) => {
+          return <h1 key={res?._id}>{res.name}</h1>
+        })}
+      </Stack>
     </Box>
   )
 }

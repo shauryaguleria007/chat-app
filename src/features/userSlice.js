@@ -13,6 +13,7 @@ export const userSlice = createSlice({
         setUser: (state, action) => {
             state.user = action.payload
         },
+
         addContact: (state, action) => {
             let flag = false
             state.contacts.map((res) => { if (res?._id === action.payload?._id) flag = true })

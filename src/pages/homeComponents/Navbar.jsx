@@ -8,6 +8,7 @@ import { getUser } from '../../app/store'
 import { useFindUserMutation } from "../../services/userApi"
 import { addContact } from '../../features/userSlice';
 import { useDispatch } from 'react-redux';
+import { useAddContactMutation } from '../../services/userApi';
 
 export const Navbar = () => {
     const user = getUser()
@@ -136,9 +137,15 @@ export const Navbar = () => {
 
 const SearchComponent = ({ res }) => {
     const dispatch = useDispatch()
-    const add = () => {
-        dispatch(addContact(res))
+    const [pushContact, { data, isFetching, error }] = useAddContactMutation()
+    const add = async () => {
+        await pushContact({ id: res._id })
     }
+    useEffect(() => {
+        if (!data) return
+        dispatch(addContact(data?.user))
+    }, [data])
+
     return <Paper sx={{
         px: 3,
         py: 1,
