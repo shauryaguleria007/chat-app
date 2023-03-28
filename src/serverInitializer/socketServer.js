@@ -17,7 +17,7 @@ module.exports = async (httpServer) => {
         console.log("error");
     })
 
-    // await redisClient.connect()
+    await redisClient.connect()
 
 
     const wrapMiddlewareForSocketIo = middleware => (socket, next) => middleware(socket.request, {}, next);
@@ -30,13 +30,19 @@ module.exports = async (httpServer) => {
             next(new Error("unauthorized"))
         next()
     })
-    socketServer.on("connection", (socket) => {
+    socketServer.on("connection", async (socket) => {
         console.log(socket.request.user.email);
+        await redisClient.set(`socket${socket.request.user.id}`, socket.id)
+        // const offlineDadta = await redisClient.sMembers(socket.request.user.id, (data) => {
+        //     console.log(data);
+        // })
+        // await redisClient.DEL(socket.request.user.id)
+        
+        socket.on("sendMessage", (message) => getClientMessage(message, socket, redisClient))
 
-        socket.on("sendMessage", (message) => getClientMessage(message, socketServer,redisClient))
 
-
-        socket.on("disconnect", () => {
+        socket.on("disconnect", async () => {
+            await redisClient.del(`socket${socket.request.user.id}`)
             console.log("user disconnected");
         })
     })
