@@ -2,22 +2,22 @@ import { useContext, createContext, useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { getUser } from "../app/store";
 
+const socket = io(`${import.meta.env.VITE_SERVER}`, {
+    autoConnect: false,
+    extraHeaders: {
+        Authorization: localStorage.getItem("auth")
+    }
+})
 const SocketContext = createContext()
 
 export const SocketProvider = ({ children }) => {
-    const [recieveMessage, setRecieveMessage] = useState({})
     const user = getUser()
 
     const recieveMessageFunction = (message) => {
         console.log(message);
     }
 
-    const socket = io(`${import.meta.env.VITE_SERVER}`, {
-        autoConnect: false,
-        extraHeaders: {
-            Authorization: localStorage.getItem("auth")
-        }
-    })
+
 
     useEffect(() => {
         socket.connect()
@@ -30,7 +30,7 @@ export const SocketProvider = ({ children }) => {
     }, [])
 
     const sendMessage = (message) => {
-        socket.emit("sendMessage", { from: user.email, message })
+        socket.emit("sendMessage", { from: user?.id, ...message })
     }
 
     return <SocketContext.Provider value={{ socket, sendMessage }}>
