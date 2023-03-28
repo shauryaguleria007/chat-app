@@ -14,7 +14,7 @@ module.exports = async (httpServer) => {
         console.log("redis client connected");
     })
     redisClient.on("error", (error) => {
-        console.log(error);
+        console.log("error");
     })
 
     await redisClient.connect()
@@ -27,7 +27,7 @@ module.exports = async (httpServer) => {
 
     socketServer.use((socket, next) => {
         if (socket.request.user === "unauthorized")
-            next(new Error("fuk u bih"))
+            next(new Error("unauthorized"))
         next()
     })
     socketServer.on("connection", (socket) => {
