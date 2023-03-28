@@ -26,7 +26,7 @@ module.exports = async (httpServer) => {
     socketServer.use(wrapMiddlewareForSocketIo(passport.authenticate(['socket'], { session: false })));
 
     socketServer.use((socket, next) => {
-        if (socket.request.user === "unauthorized")
+        if (!socket.request.user || socket.request.user === "unauthorized")
             next(new Error("unauthorized"))
         next()
     })
@@ -37,8 +37,8 @@ module.exports = async (httpServer) => {
         //     console.log(data);
         // })
         // await redisClient.DEL(socket.request.user.id)
-        
-        socket.on("sendMessage", (message) => getClientMessage(message, socket, redisClient))
+
+        socket.on("sendMessage", (message) => getClientMessage(message, socketServer, redisClient))
 
 
         socket.on("disconnect", async () => {

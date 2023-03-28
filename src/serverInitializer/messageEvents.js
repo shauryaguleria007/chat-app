@@ -5,11 +5,10 @@ exports.getClientMessage = async (message, socket, redisClient) => {
 
     if (socketId) {
         socket.to(socketId).emit("recieveMessage", message)
-        return
     }
     //cash  it 
 
-    
+
     // await redisClient.sAdd(`${message.to}`, JSON.stringify(message), () => {
     //     console.log("message cashed");
     // })
