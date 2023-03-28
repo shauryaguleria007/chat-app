@@ -17,7 +17,7 @@ module.exports = async (httpServer) => {
         console.log("error");
     })
 
-    await redisClient.connect()
+    // await redisClient.connect()
 
 
     const wrapMiddlewareForSocketIo = middleware => (socket, next) => middleware(socket.request, {}, next);
