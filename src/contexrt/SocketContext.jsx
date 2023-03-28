@@ -2,7 +2,7 @@ import { useContext, createContext, useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { getUser } from "../app/store";
 
-const socket = io(`${import.meta.env.VITE_SERVER}`, {
+export const socket = io(`${import.meta.env.VITE_SERVER}`, {
     autoConnect: false,
     extraHeaders: {
         Authorization: localStorage.getItem("auth")
