@@ -2,9 +2,9 @@ import React from 'react'
 import { Box, Stack } from '@mui/system'
 import { ChatBox } from "../../components/chat/chatBox"
 import { MessageBox } from "../../components/chat/messageBox"
-import { useSocketContext } from '../../contexrt/SocketContext'
+import { useComponentContext } from '../../contexrt/ComponentContect'
 export const Chat = () => {
-  const { showContacts } = useSocketContext()
+  const { showContacts } = useComponentContext()
   return (
     <Box sx={{
       outline: "1px solid black",

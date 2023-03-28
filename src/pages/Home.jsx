@@ -2,18 +2,18 @@ import React, { useEffect, useRef } from 'react'
 import { Link, useParams } from "react-router-dom"
 import { Navbar } from './homeComponents/Navbar'
 import { Box, Stack } from '@mui/material'
-import { useSocketContext } from '../contexrt/SocketContext'
 import { Outlet } from "react-router-dom";
 import { Contacts } from "./homeComponents/Contacts"
 import { useDispatch } from 'react-redux'
 import { getUser } from '../app/store'
 import { addContact } from '../features/userSlice'
+import { useComponentContext } from '../contexrt/ComponentContect'
 addContact
 export const Home = () => {
   const { userChat } = useParams()
   const user = getUser()
   const dispatch = useDispatch()
-  const { setShowContacts } = useSocketContext()
+  const { setShowContacts,Warning } = useComponentContext()
   useEffect(() => {
     if (!userChat) setShowContacts(true)
     else setShowContacts(false)
@@ -23,6 +23,7 @@ export const Home = () => {
       dispatch(addContact(state))
     })
   }, [user])
+
   return <>
     <Box sx={{
       height: "100vh",

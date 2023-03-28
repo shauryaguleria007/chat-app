@@ -9,18 +9,20 @@ import { useFindUserMutation } from "../../services/userApi"
 import { addContact } from '../../features/userSlice';
 import { useDispatch } from 'react-redux';
 import { useAddContactMutation } from '../../services/userApi';
+import { useComponentContext } from '../../contexrt/ComponentContect'
 
 export const Navbar = () => {
     const user = getUser()
     const chatUser = useRef()
     const offset = useRef()
 
-    const [displaySearch, setDisplaySearch] = useState({
-        display: false,
-        x: 0,
-        y: 0,
-        z: 0
-    })
+    // const [displaySearch, setDisplaySearch] = useState({
+    //     display: false,
+    //     x: 0,
+    //     y: 0,
+    //     z: 0
+    // })
+    const {displaySearch, setDisplaySearch } = useComponentContext()
     const [searchUser, { error, isFetching, data }] = useFindUserMutation()
 
     useEffect(() => {
@@ -155,11 +157,11 @@ const SearchComponent = ({ res }) => {
         px: 3,
         py: 1,
         mx: "auto",
-        width: 300,
-        zIndex:"tooltip"
+        width: 300
+
         // backgroundColor: blueGrey["A400"],
     }}
-    
+
     >
         <Stack direction={"row"} sx={{
             gap: {

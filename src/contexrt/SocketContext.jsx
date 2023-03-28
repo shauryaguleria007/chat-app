@@ -6,7 +6,6 @@ const SocketContext = createContext()
 
 export const SocketProvider = ({ children }) => {
     const [recieveMessage, setRecieveMessage] = useState({})
-    const [showContacts, setShowContacts] = useState(true)
     const user = getUser()
 
     const recieveMessageFunction = (message) => {
@@ -34,7 +33,7 @@ export const SocketProvider = ({ children }) => {
         socket.emit("sendMessage", { from: user.email, message })
     }
 
-    return <SocketContext.Provider value={{ socket, sendMessage, showContacts, setShowContacts }}>
+    return <SocketContext.Provider value={{ socket, sendMessage }}>
         {children}
     </SocketContext.Provider>
 }

@@ -18,8 +18,11 @@ function App() {
     <>
       {warning.trigger ? <Alert severity='warning' sx={{
         width: "75vw",
-        mx: "auto",
-        mt: 1,
+        zIndex:"10",
+        position:"absolute",
+        left:"50%",
+        top:'10px',
+        transform:"translateX(-50%)"
       }} >{warning.message}</Alert> : null
       }
       <BrowserRouter>
