@@ -8,12 +8,12 @@ import { useDispatch } from 'react-redux'
 import { getUser } from '../app/store'
 import { addContact } from '../features/userSlice'
 import { useComponentContext } from '../contexrt/ComponentContect'
-addContact
 export const Home = () => {
   const { userChat } = useParams()
   const user = getUser()
   const dispatch = useDispatch()
-  const { setShowContacts,Warning } = useComponentContext()
+  const { setShowContacts, Warning } = useComponentContext()
+ 
   useEffect(() => {
     if (!userChat) setShowContacts(true)
     else setShowContacts(false)
@@ -35,7 +35,7 @@ export const Home = () => {
         width: 1,
 
       }}>
-        <Navbar/>
+        <Navbar />
         <Stack sx={{
           height: 1,
           pb: 1,
@@ -47,6 +47,7 @@ export const Home = () => {
           <Contacts />
           {userChat ? <Outlet /> : <DefaultView />}
         </Stack>
+        <Link to="/logout">logout</Link>
       </Stack>
     </Box>
   </>

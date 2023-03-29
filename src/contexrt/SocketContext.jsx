@@ -2,38 +2,38 @@ import { useContext, createContext, useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { getUser } from "../app/store";
 
-export const socket = io(`${import.meta.env.VITE_SERVER}`, {
-    autoConnect: false,
-    extraHeaders: {
-        Authorization: localStorage.getItem("auth")
-    }
-})
+
+
 const SocketContext = createContext()
 
 export const SocketProvider = ({ children }) => {
     const user = getUser()
-
+    const socket = useRef(io(`${import.meta.env.VITE_SERVER}`, {
+        autoConnect: false,
+        extraHeaders: {
+            Authorization: localStorage.getItem("auth")
+        }
+    })
+    )
     const recieveMessageFunction = (message) => {
         console.log(message);
     }
-
-
-
-    useEffect(() => {
-        socket.connect()
-        return () => socket.disconnect()
-    }, [])
-
-    useEffect(() => {
-        socket.on("recieveMessage", recieveMessageFunction)
-        return () => { socket.off("recieveMessage", recieveMessageFunction) }
-    }, [])
-
     const sendMessage = (message) => {
-        socket.emit("sendMessage", { from: user?.id, ...message })
+        socket.current.emit("sendMessage", { from: user?.id, ...message })
     }
+    useEffect(() => {
+        socket.current.on("recieveMessage", recieveMessageFunction)
+        socket.current.connect()
 
-    return <SocketContext.Provider value={{ socket, sendMessage }}>
+
+        return () => {
+            socket.current.off("recieveMessage", recieveMessageFunction),
+            socket.current.disconnect()
+        }
+
+    }, [])
+
+    return <SocketContext.Provider value={{ socket:socket.current, sendMessage }}>
         {children}
     </SocketContext.Provider>
 }
