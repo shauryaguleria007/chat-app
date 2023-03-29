@@ -12,6 +12,7 @@ export const Chat = () => {
         xs: "100%",
         sm: "66.66%"
       },
+      height: 1,
       display: {
         xs: `${showContacts ? "none" : "flex"}`,
         sm: "flex"
