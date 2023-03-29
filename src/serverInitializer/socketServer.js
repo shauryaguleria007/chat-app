@@ -26,12 +26,13 @@ module.exports = async (httpServer) => {
     socketServer.use(wrapMiddlewareForSocketIo(passport.authenticate(['socket'], { session: false })));
 
     socketServer.use((socket, next) => {
-        if (!socket.request.user || socket.request.user === "unauthorized")
-            next(new Error("unauthorized"))
+        if (socket.request.user === "unauthorized") {
+            return next(new Error("unauthorized"))
+        }
         next()
     })
     socketServer.on("connection", async (socket) => {
-        console.log(socket.request.user.email);
+        console.log(socket.request.user.email, "connected");
         await redisClient.set(`socket${socket.request.user.id}`, socket.id)
         // const offlineDadta = await redisClient.sMembers(socket.request.user.id, (data) => {
         //     console.log(data);
@@ -43,7 +44,7 @@ module.exports = async (httpServer) => {
 
         socket.on("disconnect", async () => {
             await redisClient.del(`socket${socket.request.user.id}`)
-            console.log("user disconnected");
+            console.log(socket.request.user.email, "disconnected");
         })
     })
 }

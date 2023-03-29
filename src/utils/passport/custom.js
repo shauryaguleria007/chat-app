@@ -7,7 +7,7 @@ module.exports = (passport) => {
     passport.use("socket",
         new CustomStrategy(async (req, done) => {
             let token = ""
-            if (req?.headers?.authorization.startsWith("Bearer ")) {
+            if (req?.headers?.authorization?.startsWith("Bearer ")) {
                 token = req.headers.authorization.substring(7, req.headers.authorization.length);
             }
             const user = jwt.verify(token, process.env.JWT, async (err, user) => {
