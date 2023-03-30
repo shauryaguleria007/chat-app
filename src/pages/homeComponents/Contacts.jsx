@@ -1,10 +1,9 @@
-import React, { useEffect, useRef } from 'react'
-import { Box, Stack, Paper, Avatar, Card, CardHeader, IconButton } from '@mui/material'
+import React, { useEffect, useRef, useState } from 'react'
+import { Box, Stack, Paper, Avatar, Badge, Card, CardHeader, IconButton } from '@mui/material'
 import { useComponentContext } from '../../contexrt/ComponentContect'
 import { getContacts } from '../../app/store'
 import { Link, useParams } from 'react-router-dom'
-import { MoreVert } from '@mui/icons-material'
-
+import { Contrast, MoreVert } from '@mui/icons-material'
 
 export const Contacts = () => {
   const { showContacts } = useComponentContext()
@@ -51,7 +50,16 @@ export const Contacts = () => {
 
 const Contact = ({ res }) => {
   const { userChat } = useParams()
+  const contacts = getContacts()
+  const [newMessages, setNewMessages] = useState(0)
   const { displaySearch } = useComponentContext()
+
+  useEffect(() => {
+    contacts.map((singleContact) => {
+      if (singleContact._id === res._id) setNewMessages(singleContact.new)
+    })
+  }, [contacts])
+
   return <>
     <Stack sx={{
       width: 1,
@@ -66,6 +74,7 @@ const Contact = ({ res }) => {
         textDecoration: "none",
         width: "100%"
       }}>
+
         <Card sx={{
           width: "100%",
           ":hover": {
@@ -77,8 +86,15 @@ const Contact = ({ res }) => {
           variant="string"
         >
           <CardHeader avatar={
-            <Avatar src={res?.avatarUrl} sx={{
-            }} />
+            <Badge color="secondary"
+              badgeContent={newMessages}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}>
+              <Avatar src={res?.avatarUrl} sx={{
+              }} />
+            </Badge>
           }
             title={res?.name}
             subheader={"online "}

@@ -2,10 +2,19 @@ import React, { useState, useEffect } from 'react'
 import { Box, Stack } from '@mui/material'
 import { getContacts } from '../../app/store'
 import { useParams } from 'react-router-dom'
+import { resetNewMessages } from '../../features/userSlice'
+import { useDispatch } from 'react-redux'
 export const ChatBox = () => {
   const contacts = getContacts()
   const { userChat } = useParams()
   const [contact, setContactForMessageBox] = useState()
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(resetNewMessages(userChat))
+  }, [userChat,contacts])
+
+
   useEffect(() => {
     contacts.map((res) => {
       if (res._id === userChat) {
@@ -29,7 +38,7 @@ export const ChatBox = () => {
         {contact?.messages?.map((res, index) => {
           return <Box key={index} sx={{
             alignSelf: `${res.from === userChat ? "flex-start" : "flex-end"}`,
-            mx:"15%"
+            mx: "15%"
           }}>
             {res.message}
           </Box>

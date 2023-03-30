@@ -13,19 +13,22 @@ export const userSlice = createSlice({
         setUser: (state, action) => {
             state.user = action.payload
         },
-
+        resetUser: (state) => {
+            state.user = null
+            state.contacts = []
+        },
         addContact: (state, action) => {
             let flag = false
             state.contacts.map((res) => { if (res?._id === action.payload?._id) flag = true })
             if (flag) return state
-            state.contacts.unshift(action.payload)
+            state.contacts.unshift({ ...action.payload, new: 0 })
         },
         addUserMessages: (state, action) => {
             state.contacts.map((res) => {
                 if (res._id === action.payload.to) {
                     if (!res.messages) res.messages = []
-                    const { message, from } = action.payload
-                    res.messages.push({ message, from })
+                    const { message } = action.payload
+                    res.messages.push({ message, from: state.user.id })
                 }
             })
         },
@@ -35,11 +38,18 @@ export const userSlice = createSlice({
                     if (!res.messages) res.messages = []
                     const { message, from } = action.payload
                     res.messages.push({ message, from })
+                    res.new++
+
                 }
+            })
+        },
+        resetNewMessages: (state, action) => {
+            state.contacts.map((res) => {
+                if (res._id === action.payload) res.new = 0
             })
         }
     }
 })
 
-export const { setUser, addContact, addRecievedMessage, addUserMessages } = userSlice.actions
+export const { setUser, addContact, resetUser, addRecievedMessage, addUserMessages,resetNewMessages } = userSlice.actions
 export default userSlice.reducer

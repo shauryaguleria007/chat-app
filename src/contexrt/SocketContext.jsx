@@ -26,15 +26,12 @@ export const SocketProvider = ({ children }) => {
     })
     )
     const recieveMessageFunction = async (message) => {
-        // console.log(message);
         let flag = true
         contacts?.map((res) => {
             if (res?._id === message.from) flag = false
         })
-        // add to contact if not in contacts         
-        //  ->>>>>>>>>>>>     do this 
+
         if (flag) {
-        //    console.log("here")
             await addNewContact({ id: message.from })
         }
         dispatch(addRecievedMessage(message))
@@ -51,10 +48,10 @@ export const SocketProvider = ({ children }) => {
         const connectFunction = () => {
             setSocketConnectionStatus(false)
         }
+
         socket.current.on("connect", connectFunction)
         socket.current.on("recieveMessage", recieveMessageFunction)
         socket.current.connect()
-
 
         return () => {
             socket.current.off("connect", connectFunction)
@@ -64,7 +61,11 @@ export const SocketProvider = ({ children }) => {
 
     }, [])
 
-    return <SocketContext.Provider value={{ socketConnectionStatus, sendMessage }}>
+    useEffect(() => {
+        console.log(socket.current.connected);
+    })
+
+    return <SocketContext.Provider value={{ socket: socket.current, socketConnectionStatus, sendMessage }}>
         {children}
     </SocketContext.Provider >
 }
