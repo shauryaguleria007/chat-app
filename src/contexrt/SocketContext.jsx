@@ -4,6 +4,7 @@ import { getUser, getContacts } from "../app/store";
 import { addRecievedMessage, addUserMessages, addContact } from "../features/userSlice";
 import { useDispatch } from "react-redux";
 import { useAddContactMutation } from "../services/userApi";
+import { KeyboardReturnSharp } from "@mui/icons-material";
 
 
 
@@ -33,6 +34,7 @@ export const SocketProvider = ({ children }) => {
         // add to contact if not in contacts         
         //  ->>>>>>>>>>>>     do this 
         if (flag) {
+        //    console.log("here")
             await addNewContact({ id: message.from })
         }
         dispatch(addRecievedMessage(message))
