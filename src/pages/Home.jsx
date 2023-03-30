@@ -47,7 +47,7 @@ export const Home = () => {
           <Contacts />
           {userChat ? <Outlet /> : <DefaultView />}
         </Stack>
-        <Link to="/logout">logout</Link>
+        <Link to="/logout">logout {user?.email}</Link>
       </Stack>
     </Box>
   </>
