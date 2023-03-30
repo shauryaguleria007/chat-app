@@ -9,12 +9,14 @@ module.exports = async (httpServer) => {
         cors: `${process.env.client}`
     })
 
-    const redisClient = redis.createClient()
+    const redisClient = redis.createClient({
+        url:`${process.env.REDIS}`
+    }) 
     redisClient.on("connect", () => {
         console.log("redis client connected");
     })
     redisClient.on("error", (error) => {
-        console.log("error");
+        console.log(error);
     })
 
     await redisClient.connect()
