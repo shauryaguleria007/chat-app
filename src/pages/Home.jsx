@@ -8,12 +8,15 @@ import { useDispatch } from 'react-redux'
 import { getUser } from '../app/store'
 import { addContact } from '../features/userSlice'
 import { useComponentContext } from '../contexrt/ComponentContect'
+import { useSocketContext } from '../contexrt/SocketContext';
+import { Loading } from "../components/Loading"
 export const Home = () => {
   const { userChat } = useParams()
   const user = getUser()
   const dispatch = useDispatch()
+  const { socketConnectionStatus } = useSocketContext()
   const { setShowContacts, Warning } = useComponentContext()
- 
+
   useEffect(() => {
     if (!userChat) setShowContacts(true)
     else setShowContacts(false)
@@ -23,6 +26,10 @@ export const Home = () => {
       dispatch(addContact(state))
     })
   }, [user])
+
+  if (socketConnectionStatus) return <>
+    <h1>connecting socket </h1>
+    <Loading /> </>
 
   return <>
     <Box sx={{

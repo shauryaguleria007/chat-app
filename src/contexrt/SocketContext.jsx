@@ -14,6 +14,7 @@ const SocketContext = createContext()
 export const SocketProvider = ({ children }) => {
     const dispatch = useDispatch()
     const user = getUser()
+    const [socketConnectionStatus, setSocketConnectionStatus] = useState(true)
     const contacts = getContacts()
     const [addNewContact, { data, isFerching, error }] = useAddContactMutation()
     const socket = useRef(io(`${import.meta.env.VITE_SERVER}`, {
@@ -45,20 +46,25 @@ export const SocketProvider = ({ children }) => {
         dispatch(addUserMessages(message))
     }
     useEffect(() => {
+        const connectFunction = () => {
+            setSocketConnectionStatus(false)
+        }
+        socket.current.on("connect", connectFunction)
         socket.current.on("recieveMessage", recieveMessageFunction)
         socket.current.connect()
 
 
         return () => {
+            socket.current.off("connect", connectFunction)
             socket.current.off("recieveMessage", recieveMessageFunction),
                 socket.current.disconnect()
         }
 
     }, [])
 
-    return <SocketContext.Provider value={{ socket: socket.current, sendMessage }}>
+    return <SocketContext.Provider value={{ socketConnectionStatus, sendMessage }}>
         {children}
-    </SocketContext.Provider>
+    </SocketContext.Provider >
 }
 
 
