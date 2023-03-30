@@ -10,8 +10,8 @@ module.exports = async (httpServer) => {
     })
 
     const redisClient = redis.createClient({
-        url:`${process.env.REDIS}`
-    }) 
+        url: `${process.env.REDIS}`
+    })
     redisClient.on("connect", () => {
         console.log("redis client connected");
     })
@@ -36,14 +36,15 @@ module.exports = async (httpServer) => {
     socketServer.on("connection", async (socket) => {
         console.log(socket.request.user.email, "connected");
         await redisClient.set(`socket${socket.request.user.id}`, socket.id)
-        // const offlineDadta = await redisClient.sMembers(socket.request.user.id, (data) => {
-        //     console.log(data);
-        // })
-        // await redisClient.DEL(socket.request.user.id)
+        const offlineDadta = await redisClient.sMembers(socket.request.user.id, (data) => {
+            console.log(data);
+        })
+        offlineDadta.map((send) => {
+            getClientMessage(JSON.parse(send), socketServer, redisClient)
+        })
+        await redisClient.DEL(socket.request.user.id)
 
         socket.on("sendMessage", (message) => getClientMessage(message, socketServer, redisClient))
-
-
         socket.on("disconnect", async () => {
             await redisClient.del(`socket${socket.request.user.id}`)
             console.log(socket.request.user.email, "disconnected");
