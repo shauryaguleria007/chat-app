@@ -32,9 +32,13 @@ exports.findUser = AsyncErrorHandler(async (req, res, next) => {
 
 
 exports.addContact = AsyncErrorHandler(async (req, res, next) => {
+  // console.log("here");
+  // console.log(req.body.id);
   const user = await User.findById(new mongoose.Types.ObjectId(req.body.id)).select(["-contacts", "-mailToken"])
+  // console.log(user);
   req.user.contacts.map((id) => {
-    if (user._id === id._id) throw new verificatoinError("")
+    // console.log(user._id, id._id);
+    if (user._id.toString() === id._id.toString()) throw new verificatoinError("")
   })
   req.user.contacts.push(user)
   await req.user.save()
