@@ -61,9 +61,6 @@ export const SocketProvider = ({ children }) => {
 
     }, [])
 
-    useEffect(() => {
-        console.log(socket.current.connected);
-    })
 
     return <SocketContext.Provider value={{ socket: socket.current, socketConnectionStatus, sendMessage }}>
         {children}

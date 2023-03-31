@@ -15,6 +15,7 @@ export const Contacts = () => {
       width: {
         xs: "100%",
         sm: "33.33%",
+        
       },
       display: {
         xs: `${showContacts ? "flex" : "none"}`,
@@ -22,7 +23,7 @@ export const Contacts = () => {
       },
       "& ::-webkit-scrollbar": {
         display: "none"
-      }
+      },
     }}
       ref={box}
     >
@@ -32,7 +33,8 @@ export const Contacts = () => {
         width: 1,
         height: `${box?.current?.offsetHeight}px`,
         px: 4,
-      }}>
+      }}
+      >
 
 
         <Stack width={"100%"} alignItems={"center"} gap={1} sx={{

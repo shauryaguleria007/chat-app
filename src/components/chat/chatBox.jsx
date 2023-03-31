@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Box, Stack } from '@mui/material'
 import { getContacts } from '../../app/store'
 import { useParams } from 'react-router-dom'
@@ -9,10 +9,12 @@ export const ChatBox = () => {
   const { userChat } = useParams()
   const [contact, setContactForMessageBox] = useState()
   const dispatch = useDispatch()
+  const box = useRef()
+  const scroll = useRef(null)
 
   useEffect(() => {
     dispatch(resetNewMessages(userChat))
-  }, [userChat,contacts])
+  }, [userChat, contacts])
 
 
   useEffect(() => {
@@ -21,22 +23,33 @@ export const ChatBox = () => {
         setContactForMessageBox(res)
       }
     })
-  }, [contacts])
+  }, [contacts,userChat])
+
+  useEffect(() => {
+    scroll?.current?.scrollIntoView({ behaviour: "smooth" })
+  }, [contact])
+
+
   return (
     <Box sx={{
       outline: "1px solid black",
       width: "100%",
       height: "85%"
+    }}
+      ref={box}>
 
-    }}>
       <Stack sx={{
-        width: 1
-        , height: 1,
+        overflowY: "scroll",
+        width: 1,
+        "::-webkit-scrollbar": {
+          display: "none"
+        },
+        height: `${box?.current?.offsetHeight}px`,
 
       }}
         gap={1}>
         {contact?.messages?.map((res, index) => {
-          return <Box key={index} sx={{
+          return <Box key={index} ref={scroll} sx={{
             alignSelf: `${res.from === userChat ? "flex-start" : "flex-end"}`,
             mx: "15%"
           }}>
@@ -44,6 +57,6 @@ export const ChatBox = () => {
           </Box>
         })}
       </Stack>
-    </Box>
+    </Box >
   )
 }
