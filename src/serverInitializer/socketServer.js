@@ -14,6 +14,7 @@ module.exports = async (httpServer) => {
     })
     redisClient.on("connect", () => {
         console.log("redis client connected");
+        redisClient.flushAll()
     })
     redisClient.on("error", (error) => {
         console.log(error);
@@ -35,6 +36,7 @@ module.exports = async (httpServer) => {
     })
     socketServer.on("connection", async (socket) => {
         console.log(socket.request.user.email, "connected");
+
         await redisClient.set(`socket${socket.request.user.id}`, socket.id)
         const offlineDadta = await redisClient.sMembers(socket.request.user.id, (data) => {
             console.log(data);
