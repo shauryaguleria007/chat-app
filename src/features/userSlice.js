@@ -29,6 +29,11 @@ export const userSlice = createSlice({
                     if (!res.messages) res.messages = []
                     const { message } = action.payload
                     res.messages.push({ message, from: state.user.id })
+                    res.messages.sort((a, b) => {
+                        if (a.date > b.date) return 1
+                        if (a.date < b.date) return -1
+                        return 0
+                    })
                 }
             })
         },

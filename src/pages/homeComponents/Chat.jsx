@@ -9,7 +9,7 @@ export const Chat = () => {
  
   return (
     <Box sx={{
-      outline: "1px solid black",
+      // outline: "1px solid black",
       width: {
         xs: "100%",
         sm: "66.66%"
@@ -17,8 +17,8 @@ export const Chat = () => {
       height: 1,
       display: {
         xs: `${showContacts ? "none" : "flex"}`,
-        sm: "flex"
-      }
+        sm: "flex",
+      },
     }}>
       <Stack rowGap={1} sx={{
         justifyContent: "space-between",

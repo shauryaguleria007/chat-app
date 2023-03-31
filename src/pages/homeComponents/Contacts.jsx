@@ -66,7 +66,7 @@ const Contact = ({ res }) => {
     <Stack sx={{
       width: 1,
       display: {
-        xs: `${displaySearch.display ? "none" : "felx"}`,
+        xs: `${displaySearch.display ? "none" : "flex"}`,
         md: "flex",
       }
     }}

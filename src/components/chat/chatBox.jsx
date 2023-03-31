@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Box, Stack } from '@mui/material'
+import { Box, Stack, Paper } from '@mui/material'
 import { getContacts } from '../../app/store'
 import { useParams } from 'react-router-dom'
 import { resetNewMessages } from '../../features/userSlice'
@@ -23,7 +23,7 @@ export const ChatBox = () => {
         setContactForMessageBox(res)
       }
     })
-  }, [contacts,userChat])
+  }, [contacts, userChat])
 
   useEffect(() => {
     scroll?.current?.scrollIntoView({ behaviour: "smooth" })
@@ -32,7 +32,7 @@ export const ChatBox = () => {
 
   return (
     <Box sx={{
-      outline: "1px solid black",
+      // outline: "1px solid black",
       width: "100%",
       height: "85%"
     }}
@@ -49,14 +49,44 @@ export const ChatBox = () => {
       }}
         gap={1}>
         {contact?.messages?.map((res, index) => {
-          return <Box key={index} ref={scroll} sx={{
-            alignSelf: `${res.from === userChat ? "flex-start" : "flex-end"}`,
-            mx: "15%"
+          if (res.from === userChat) return<Box key={index} ref={scroll} sx={{
+            alignSelf: "flex-start",
+            mx: "15%",
           }}>
+            <Paper
+              sx={{
+                backgroundColor: "primary.dark",
+                color: "white",
+                borderRadius: 5,
+                py: 1,
+                px: 3,
+              }}
+            >
+            {/* <CardHeader /> */}
             {res.message}
+
+          </Paper>
+          </Box>
+          return <Box key={index} ref={scroll} sx={{
+            alignSelf: "flex-end",
+            mx: "15%",
+          }}>
+            <Paper
+              sx={{
+                backgroundColor: "success.light",
+                color: "white",
+                borderRadius: 5,
+                py: 1,
+                px: 3,
+              }}
+            >
+            {/* <CardHeader /> */}
+            {res.message}
+
+          </Paper>
           </Box>
         })}
-      </Stack>
+      </Stack >
     </Box >
   )
 }
