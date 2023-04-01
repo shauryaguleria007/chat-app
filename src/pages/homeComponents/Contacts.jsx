@@ -7,6 +7,7 @@ import { Contrast, MoreVert } from '@mui/icons-material'
 
 export const Contacts = () => {
   const { showContacts } = useComponentContext()
+
   const contacts = getContacts()
   const box = useRef()
 
@@ -15,7 +16,6 @@ export const Contacts = () => {
       width: {
         xs: "100%",
         sm: "33.33%",
-        
       },
       display: {
         xs: `${showContacts ? "flex" : "none"}`,
@@ -54,8 +54,12 @@ const Contact = ({ res }) => {
   const { userChat } = useParams()
   const contacts = getContacts()
   const [newMessages, setNewMessages] = useState(0)
-  const { displaySearch } = useComponentContext()
+  const { displaySearch, setShowContacts } = useComponentContext()
 
+
+  const display = () => {
+    setShowContacts(false)
+  }
   useEffect(() => {
     contacts.map((singleContact) => {
       if (singleContact._id === res._id) setNewMessages(singleContact.new)
@@ -67,12 +71,12 @@ const Contact = ({ res }) => {
       width: 1,
       display: {
         xs: `${displaySearch.display ? "none" : "flex"}`,
-        md: "flex",
+        sm: "flex",
       }
     }}
       direction="row"
     >
-      <Link to={`/${res._id}`} style={{
+      <Link to={`/${res._id}`} onClick={display} style={{
         textDecoration: "none",
         width: "100%"
       }}>

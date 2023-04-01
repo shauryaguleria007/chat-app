@@ -4,13 +4,13 @@ import { getContacts } from '../../app/store'
 import { useParams } from 'react-router-dom'
 import { resetNewMessages } from '../../features/userSlice'
 import { useDispatch } from 'react-redux'
+import { Message } from "./Message"
 export const ChatBox = () => {
   const contacts = getContacts()
   const { userChat } = useParams()
   const [contact, setContactForMessageBox] = useState()
   const dispatch = useDispatch()
   const box = useRef()
-  const scroll = useRef(null)
 
   useEffect(() => {
     dispatch(resetNewMessages(userChat))
@@ -24,12 +24,6 @@ export const ChatBox = () => {
       }
     })
   }, [contacts, userChat])
-
-  useEffect(() => {
-    scroll?.current?.scrollIntoView({ behaviour: "smooth" })
-  }, [contact])
-
-
   return (
     <Box sx={{
       // outline: "1px solid black",
@@ -49,42 +43,7 @@ export const ChatBox = () => {
       }}
         gap={1}>
         {contact?.messages?.map((res, index) => {
-          if (res.from === userChat) return<Box key={index} ref={scroll} sx={{
-            alignSelf: "flex-start",
-            mx: "15%",
-          }}>
-            <Paper
-              sx={{
-                backgroundColor: "primary.dark",
-                color: "white",
-                borderRadius: 5,
-                py: 1,
-                px: 3,
-              }}
-            >
-            {/* <CardHeader /> */}
-            {res.message}
-
-          </Paper>
-          </Box>
-          return <Box key={index} ref={scroll} sx={{
-            alignSelf: "flex-end",
-            mx: "15%",
-          }}>
-            <Paper
-              sx={{
-                backgroundColor: "success.light",
-                color: "white",
-                borderRadius: 5,
-                py: 1,
-                px: 3,
-              }}
-            >
-            {/* <CardHeader /> */}
-            {res.message}
-
-          </Paper>
-          </Box>
+          return <Message key={index} res={res} />
         })}
       </Stack >
     </Box >

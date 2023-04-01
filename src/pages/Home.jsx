@@ -7,25 +7,19 @@ import { Contacts } from "./homeComponents/Contacts"
 import { useDispatch } from 'react-redux'
 import { getUser } from '../app/store'
 import { addContact } from '../features/userSlice'
-import { useComponentContext } from '../contexrt/ComponentContect'
 import { useSocketContext } from '../contexrt/SocketContext';
 import { Loading } from "../components/Loading"
+import { useComponentContext } from '../contexrt/ComponentContect';
 export const Home = () => {
   const { userChat } = useParams()
   const user = getUser()
   const dispatch = useDispatch()
   const { socketConnectionStatus } = useSocketContext()
-  const { setShowContacts, Warning } = useComponentContext()
+  const { setShowContacts } = useComponentContext()
 
-  useEffect(() => {
-    if (!userChat) setShowContacts(true)
-    else setShowContacts(false)
-  }, [userChat])
-  useEffect(() => {
-    user?.contacts.map((state) => {
-      dispatch(addContact(state))
-    })
-  }, [user])
+
+  useEffect(() => { setShowContacts(true) }, [])
+
 
   if (socketConnectionStatus) return <>
     <h1>connecting socket </h1>

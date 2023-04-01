@@ -1,11 +1,14 @@
 import React, { useRef, useEffect } from 'react'
 import { Box, Stack, TextField } from '@mui/material'
 import { useSocketContext } from "../../contexrt/SocketContext"
+import { useComponentContext } from '../../contexrt/ComponentContect'
+import { Link } from "react-router-dom"
 import { useParams } from 'react-router-dom'
 export const MessageBox = () => {
   const messsageDiv = useRef()
   const { userChat } = useParams()
   const { sendMessage } = useSocketContext()
+  const { setShowContacts } = useComponentContext()
   const formSubmit = (e) => {
     e.preventDefault()
     sendMessage({
@@ -15,7 +18,9 @@ export const MessageBox = () => {
     messsageDiv.current.value = ""
   }
 
-
+  const display = () => {
+    setShowContacts(true)
+  }
 
   return (
     <Box sx={{
@@ -30,6 +35,15 @@ export const MessageBox = () => {
         justifyContent: "center"
       }}
         direction="row">
+        <Box sx={{
+          display: {
+            xs: "flex",
+            sm: "none"
+          }
+        }}>
+          <Link to="/" onClick={display}>
+            back</Link>
+        </Box>
         <TextField
           size="small"
           component="form"

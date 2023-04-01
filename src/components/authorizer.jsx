@@ -3,19 +3,27 @@ import { useAuthenticateUserQuery, useLazySendMailQuery } from '../services/auth
 import { useNavigate, Link, Outlet, useParams } from 'react-router-dom'
 import { Loading } from "./Loading"
 import { useDispatch } from "react-redux"
-import { setUser } from "../features/userSlice"
+import { setUser ,addContact} from "../features/userSlice"
 import { Box, Card, CardContent, CardHeader, TextField, Stack, CardActions } from "@mui/material"
 import LoadingButton from '@mui/lab/LoadingButton'
 import { display } from '@mui/system'
 import { useComponentContext } from "../contexrt/ComponentContect"
 import { Verify } from '../pages/Verify'
-
+import { getUser } from '../app/store'
 export const Authorizer = () => {
   const { Warning } = useComponentContext()
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { id } = useParams()
+  const user = getUser()
   const { data, isLoading, isError, error } = useAuthenticateUserQuery()
+
+   useEffect(() => {
+      user?.contacts.map((state) => {
+        dispatch(addContact(state))
+      })
+    }, [user])
+
   useEffect(() => {
     setTimeout(() => { }, 2000)
     if (isError) {

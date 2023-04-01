@@ -3,8 +3,7 @@ import { io } from "socket.io-client";
 import { getUser, getContacts } from "../app/store";
 import { addRecievedMessage, addUserMessages, addContact } from "../features/userSlice";
 import { useDispatch } from "react-redux";
-import { useAddContactMutation } from "../services/userApi";
-import { KeyboardReturnSharp } from "@mui/icons-material";
+import { useAddContactMutation, useAddMessageMutation } from "../services/userApi";
 
 
 
@@ -18,6 +17,7 @@ export const SocketProvider = ({ children }) => {
     const [socketConnectionStatus, setSocketConnectionStatus] = useState(true)
     const contacts = getContacts()
     const [addNewContact, { data, isFerching, error }] = useAddContactMutation()
+    const [addNewMessage] = useAddMessageMutation()
     const socket = useRef(io(`${import.meta.env.VITE_SERVER}`, {
         autoConnect: false,
         extraHeaders: {
@@ -27,8 +27,10 @@ export const SocketProvider = ({ children }) => {
     )
     const recieveMessageFunction = async (message) => {
         let flag = true
+
+        console.log(contacts);
         contacts?.map((res) => {
-            if (res?._id === message.from) flag = false
+            if (res?._id === message.from) { flag = false }
         })
 
         if (flag) {
@@ -36,15 +38,18 @@ export const SocketProvider = ({ children }) => {
         }
         dispatch(addRecievedMessage(message))
     }
+
+    const sendMessage = async (message) => {
+        const data = { from: user?.id, ...message, date: `${new Date()}` }
+        socket.current.emit("sendMessage", data)
+        dispatch(addUserMessages(data))
+        await addNewMessage(data)
+    }
+
     useEffect(() => {
         if (!data) return
         dispatch(addContact(data?.user))
     }, [data])
-    const sendMessage = (message) => {
-        const data = { from: user?.id, ...message, date:`${new Date()}` }
-        socket.current.emit("sendMessage", data)
-        dispatch(addUserMessages(data))
-    }
     useEffect(() => {
         const connectFunction = () => {
             setSocketConnectionStatus(false)
