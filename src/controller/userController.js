@@ -1,12 +1,13 @@
 const User = require('../modal/userModal')
-const { AsyncErrorHandler, customError, verificatoinError } = require('../utils')
+const Message = require("../modal/messageModal")
+const { AsyncErrorHandler, customError, verificatoinError, MessageError } = require('../utils')
 const jwt = require("jsonwebtoken")
 const mongoose = require("mongoose")
 exports.createUser = AsyncErrorHandler(async (req, res, next) => {
   const { email, password, name } = req.body
 
   const insertUser = await User.create({ email, password, name })
-  if (!insertUser) return new customError("email", "credential")
+  if (!insertUser) throw new customError("email", "credential")
   const token = jwt.sign(
     {
       id: insertUser._id,
@@ -43,4 +44,16 @@ exports.addContact = AsyncErrorHandler(async (req, res, next) => {
   req.user.contacts.push(user)
   await req.user.save()
   res.json({ user })
+})
+
+
+exports.addMessage = AsyncErrorHandler(async (req, res, next) => {
+  const { from, to, message ,date} = req.body
+  const userOne = await User.findById(from)
+  const userTwo = await User.findById(to)
+  if (!userOne || !userTwo) throw new MessageError("sf")
+  const data = await Message.create({ message, from, to,date })
+
+  if (!data) throw new MessageError("")
+  res.json(data)
 })

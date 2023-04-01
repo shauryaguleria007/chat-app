@@ -37,3 +37,10 @@ exports.EmailerificatoinError = class extends Error {
     this.name = 'emailVerification'
   }
 }
+
+exports.MessageError = class extends Error {
+  constructor(message) {
+    super(`${message}`)
+    this.name = "messageUser"
+  }
+}
