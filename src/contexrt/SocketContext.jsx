@@ -41,8 +41,9 @@ export const SocketProvider = ({ children }) => {
         dispatch(addContact(data?.user))
     }, [data])
     const sendMessage = (message) => {
-        socket.current.emit("sendMessage", { from: user?.id, ...message, date: new Date() })
-        dispatch(addUserMessages(message))
+        const data = { from: user?.id, ...message, date:`${new Date()}` }
+        socket.current.emit("sendMessage", data)
+        dispatch(addUserMessages(data))
     }
     useEffect(() => {
         const connectFunction = () => {

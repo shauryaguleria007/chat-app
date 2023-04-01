@@ -27,13 +27,8 @@ export const userSlice = createSlice({
             state.contacts.map((res) => {
                 if (res._id === action.payload.to) {
                     if (!res.messages) res.messages = []
-                    const { message } = action.payload
-                    res.messages.push({ message, from: state.user.id })
-                    res.messages.sort((a, b) => {
-                        if (a.date > b.date) return 1
-                        if (a.date < b.date) return -1
-                        return 0
-                    })
+                    res.messages.push(action.payload)
+
                 }
             })
         },
@@ -45,6 +40,11 @@ export const userSlice = createSlice({
                     res.messages.push(action.payload)
                     res.new++
                     resp = res
+                    res.messages.sort((a, b) => {
+                        if (a.date > b.date) return 1
+                        if (a.date < b.date) return -1
+                        return 0
+                    })
                 }
             })
             state.contacts.splice(state.contacts.indexOf(resp), 1)

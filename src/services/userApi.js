@@ -38,9 +38,17 @@ const authApi = createApi({
             }),
             keepUnusedDataFor: 0.001
 
+        }),
+        addMessage: builder.mutation({
+            query: (body) => ({
+                url: "/addMessage",
+                method: "POST",
+                body
+            }),
+            keepUnusedDataFor: 0.001
         })
     }),
 })
 
 export default authApi
-export const { useRegisterMutation, useFindUserMutation, useAddContactMutation } = authApi
+export const { useRegisterMutation, useFindUserMutation, useAddContactMutation, useAddMessageMutation } = authApi
