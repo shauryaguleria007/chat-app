@@ -20,15 +20,15 @@ export const ChatBox = () => {
     await getMessages({ id: user?.id, contact: userChat })
   }
 
-  // useEffect(() => {
-  //   getData()
-  // }, [])           //related to backup 
+  useEffect(() => {
+    getData()
+  }, [])           //related to backup 
 
 
-  // useEffect(() => {
-  //   if (!data) return
-  //   dispatch(addMessagesFromDataBase(data))
-  // }, [data])  related to backups 
+  useEffect(() => {
+    if (!data) return
+    dispatch(addMessagesFromDataBase(data))
+  }, [data])  
 
   useEffect(() => {
     dispatch(resetNewMessages(userChat))

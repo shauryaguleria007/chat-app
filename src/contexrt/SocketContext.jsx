@@ -45,7 +45,7 @@ export const SocketProvider = ({ children }) => {
         const data = { from: user?.id, ...message, date: Date.now() }
         socket.current.emit("sendMessage", data)
         dispatch(addUserMessages(data))
-        // await addNewMessage(data)    backup data
+        // await addNewMessage(data)
     }
 
     useEffect(() => {
