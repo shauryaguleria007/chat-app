@@ -28,7 +28,7 @@ export const SocketProvider = ({ children }) => {
     const recieveMessageFunction = async (message) => {
         let flag = true
 
-        console.log(contacts);
+        // console.log(contacts);
         contacts?.map((res) => {
             if (res?._id === message.from) { flag = false }
         })
@@ -37,13 +37,15 @@ export const SocketProvider = ({ children }) => {
             await addNewContact({ id: message.from })
         }
         dispatch(addRecievedMessage(message))
+        // await addNewMessage(message)  backup data
+
     }
 
     const sendMessage = async (message) => {
-        const data = { from: user?.id, ...message, date: `${new Date()}` }
+        const data = { from: user?.id, ...message, date: Date.now() }
         socket.current.emit("sendMessage", data)
         dispatch(addUserMessages(data))
-        await addNewMessage(data)
+        // await addNewMessage(data)    backup data
     }
 
     useEffect(() => {

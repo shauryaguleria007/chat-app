@@ -1,16 +1,34 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Box, Stack, Paper } from '@mui/material'
+import { useGetMessagesMutation } from '../../services/userApi'
 import { getContacts } from '../../app/store'
 import { useParams } from 'react-router-dom'
-import { resetNewMessages } from '../../features/userSlice'
+import { resetNewMessages, addMessagesFromDataBase } from '../../features/userSlice'
 import { useDispatch } from 'react-redux'
 import { Message } from "./Message"
+import { getUser } from '../../app/store'
 export const ChatBox = () => {
   const contacts = getContacts()
+  const user = getUser()
   const { userChat } = useParams()
   const [contact, setContactForMessageBox] = useState()
   const dispatch = useDispatch()
   const box = useRef()
+  const [getMessages, { data, isFetching, error }] = useGetMessagesMutation()
+
+  const getData = async () => {
+    await getMessages({ id: user?.id, contact: userChat })
+  }
+
+  // useEffect(() => {
+  //   getData()
+  // }, [])           //related to backup 
+
+
+  // useEffect(() => {
+  //   if (!data) return
+  //   dispatch(addMessagesFromDataBase(data))
+  // }, [data])  related to backups 
 
   useEffect(() => {
     dispatch(resetNewMessages(userChat))
@@ -24,6 +42,9 @@ export const ChatBox = () => {
       }
     })
   }, [contacts, userChat])
+
+
+
   return (
     <Box sx={{
       // outline: "1px solid black",
@@ -31,7 +52,6 @@ export const ChatBox = () => {
       height: "85%"
     }}
       ref={box}>
-
       <Stack sx={{
         overflowY: "scroll",
         width: 1,
@@ -39,7 +59,6 @@ export const ChatBox = () => {
           display: "none"
         },
         height: `${box?.current?.offsetHeight}px`,
-
       }}
         gap={1}>
         {contact?.messages?.map((res, index) => {

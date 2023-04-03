@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 export const Message = ({ res }) => {
     const { userChat } = useParams()
     useEffect(() => {
+       if(res?.formServer)return 
         scroll?.current?.scrollIntoView({ behaviour: "smooth" })
     }, [])
     const scroll = useRef()
