@@ -27,18 +27,13 @@ export const SocketProvider = ({ children }) => {
     )
     const recieveMessageFunction = async (message) => {
         let flag = true
-
-        // console.log(contacts);
         contacts?.map((res) => {
             if (res?._id === message.from) { flag = false }
         })
-
         if (flag) {
             await addNewContact({ id: message.from })
         }
         dispatch(addRecievedMessage(message))
-        // await addNewMessage(message)  backup data
-
     }
 
     const sendMessage = async (message) => {

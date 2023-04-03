@@ -18,7 +18,10 @@ export const Home = () => {
   const { setShowContacts } = useComponentContext()
 
 
-  useEffect(() => { setShowContacts(true) }, [])
+  useEffect(() => {
+    if (!userChat) setShowContacts(true)
+    else setShowContacts(false)
+  }, [userChat])
 
 
   if (socketConnectionStatus) return <>

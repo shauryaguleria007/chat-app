@@ -30,46 +30,34 @@ export const userSlice = createSlice({
             })
         },
         addRecievedMessage: (state, action) => {
-            let resp
-            state.contacts.map((res) => {
+            const message = { ...action.payload, formServer: false }
+            state.contacts.map((res, location) => {
                 if (res._id === action.payload.from) {
-                    res.messages.push({ ...action.payload, formServer: false })
-                    res.messages.sort((a, b) => {
-                        const d1 = a.date
-                        const d2 = b.date
-                        if (d1 > d2) return 1
-                        if (d1 < d2) return -1
-                        return 0
+                    let inserted = false
+                    if (res.messages.length === 0)
+                        res.messages.push(message)
+                    else res.messages.map((data, index) => {
+                        if (inserted) return
+                        if (action.payload.date < data.date) {
+                            res.messages.splice(index, 0, message)
+                            inserted = true
+                        }
+                        else if (index + 1 === res.messages.length) {
+                            inserted = true
+                            res.messages.push(message)
+                        }
                     })
                     res.new++
-                    resp = res
-
+                    state.contacts.splice(location, 1)
+                    state.contacts.unshift(res)
                 }
             })
-            state.contacts.splice(state.contacts.indexOf(resp), 1)
-            state.contacts.unshift(resp)
+
 
         },
         addMessagesFromDataBase: (state, action) => {// basic needs optimazation
             console.log(action.payload);
-
-            // state.contacts.map((res) => {
-            //     if (res._id === action.payload[0].from || res._id === action.payload[0].to) {
-            //         action.payload.map((message) => {
-            //             const d1 =Date.parse( message.date)
-            //             console.log(d1, d2);
-            //             if (d2 === null || d2 > d1) res.messages.unshift({ ...message, formServer: false })
-
-            //         })
-            //         res.messages.sort((a, b) => {
-            //             const d1 = a.date
-            //             const d2 = b.date
-            //             if (d1 > d2) return 1
-            //             if (d1 < d2) return -1
-            //             return 0
-            //         })
-            //     }
-            // })
+          
         },
         resetNewMessages: (state, action) => {
             state.contacts.map((res) => {
