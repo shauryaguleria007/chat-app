@@ -10,6 +10,10 @@ const messageSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         requierd: true
     },
+    user: {
+        type: mongoose.Types.ObjectId,
+        requierd: true
+    },
     to: {
         requierd: true,
         type: mongoose.Types.ObjectId

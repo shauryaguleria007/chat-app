@@ -48,12 +48,29 @@ exports.addContact = AsyncErrorHandler(async (req, res, next) => {
 
 
 exports.addMessage = AsyncErrorHandler(async (req, res, next) => {
-  const { from, to, message ,date} = req.body
+  const { from, to, message, date } = req.body
   const userOne = await User.findById(from)
   const userTwo = await User.findById(to)
   if (!userOne || !userTwo) throw new MessageError("sf")
-  const data = await Message.create({ message, from, to,date })
+  const data = await Message.create({ message, from, to, date, user: req.user._id })
 
   if (!data) throw new MessageError("")
   res.json(data)
+})
+
+exports.getMessages = AsyncErrorHandler(async (req, res, next) => {
+  const messages = await Message.find(
+    {
+      $or: [{
+        from: req.body.id,
+        to: req.body.contact,
+        user: req.user._id
+      }, {
+        to: req.body.id,
+        from: req.body.contact,
+        user: req.user._id
+      }]
+    })
+  if (!messages) throw new MessageError("")
+  res.json(messages)
 })
