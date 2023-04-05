@@ -28,7 +28,7 @@ export const ChatBox = () => {
   useEffect(() => {
     if (!data) return
     dispatch(addMessagesFromDataBase(data))
-  }, [data])  
+  }, [data])
 
   useEffect(() => {
     dispatch(resetNewMessages(userChat))
@@ -46,12 +46,13 @@ export const ChatBox = () => {
 
 
   return (
-    <Box sx={{
+    <Paper sx={{
       // outline: "1px solid black",
       width: "100%",
       height: "85%"
     }}
-      ref={box}>
+      ref={box}
+      variant="outlined">
       <Stack sx={{
         overflowY: "scroll",
         width: 1,
@@ -65,6 +66,6 @@ export const ChatBox = () => {
           return <Message key={index} res={res} />
         })}
       </Stack >
-    </Box >
+    </Paper >
   )
 }

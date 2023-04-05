@@ -18,6 +18,7 @@ export const SocketProvider = ({ children }) => {
     const contacts = getContacts()
     const [addNewContact, { data, isFerching, error }] = useAddContactMutation()
     const [addNewMessage] = useAddMessageMutation()
+
     const socket = useRef(io(`${import.meta.env.VITE_SERVER}`, {
         autoConnect: false,
         extraHeaders: {
@@ -51,14 +52,20 @@ export const SocketProvider = ({ children }) => {
         const connectFunction = () => {
             setSocketConnectionStatus(false)
         }
+        const disconnectFunction = () => {
+            setSocketConnectionStatus(true)
+        }
 
         socket.current.on("connect", connectFunction)
+        socket.current.on("disconnect", disconnectFunction)
+
         socket.current.on("recieveMessage", recieveMessageFunction)
         socket.current.connect()
 
         return () => {
             socket.current.off("connect", connectFunction)
             socket.current.off("recieveMessage", recieveMessageFunction),
+                socket.current.off("disconnect", disconnectFunction),
                 socket.current.disconnect()
         }
 

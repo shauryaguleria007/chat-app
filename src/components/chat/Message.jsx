@@ -39,7 +39,6 @@ export const Message = ({ res }) => {
                 px: 3,
             }}
         >
-            {/* <CardHeader /> */}
             {res.message}
 
         </Paper>

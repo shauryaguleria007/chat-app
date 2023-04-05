@@ -24,9 +24,7 @@ export const Home = () => {
   }, [userChat])
 
 
-  if (socketConnectionStatus) return <>
-    <h1>connecting socket </h1>
-    <Loading /> </>
+  if (socketConnectionStatus) return <Loading />
 
   return <>
     <Box sx={{
@@ -51,7 +49,6 @@ export const Home = () => {
           <Contacts />
           {userChat ? <Outlet /> : <DefaultView />}
         </Stack>
-        <Link to="/logout">logout {user?.email}</Link>
       </Stack>
     </Box>
   </>

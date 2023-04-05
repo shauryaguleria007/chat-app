@@ -1,8 +1,11 @@
 import React, { useRef, useEffect } from 'react'
-import { Box, Stack, TextField } from '@mui/material'
+import { Box, Stack, TextField, Paper, IconButton } from '@mui/material'
 import { useSocketContext } from "../../contexrt/SocketContext"
 import { useComponentContext } from '../../contexrt/ComponentContect'
 import { Link } from "react-router-dom"
+import SendIcon from '@mui/icons-material/Send';
+
+
 import { useParams } from 'react-router-dom'
 export const MessageBox = () => {
   const messsageDiv = useRef()
@@ -11,6 +14,7 @@ export const MessageBox = () => {
   const { setShowContacts } = useComponentContext()
   const formSubmit = (e) => {
     e.preventDefault()
+    if (messsageDiv?.current?.value === "") return
     sendMessage({
       message: messsageDiv?.current?.value,
       to: userChat
@@ -23,11 +27,13 @@ export const MessageBox = () => {
   }
 
   return (
-    <Box sx={{
-      outline: "1px solid black",
+    <Paper sx={{
+      // outline: "1px solid black",
       width: "100%",
       height: "15%"
-    }}>
+    }}
+variant="outlined"
+    >
       <Stack sx={{
         height: 1,
         width: 1,
@@ -44,12 +50,25 @@ export const MessageBox = () => {
           <Link to="/" onClick={display}>
             back</Link>
         </Box>
-        <TextField
-          size="small"
-          component="form"
+        <Stack component="form"
           onSubmit={formSubmit}
-          inputRef={messsageDiv} />
+          direction={"row"}
+        >
+          <TextField
+            size="small"
+            inputRef={messsageDiv}
+            variant="standard"
+            placeholder='message'
+          />
+          <Box>
+            <IconButton vartiant="contained" type="submit">
+              <SendIcon />
+            </IconButton>
+          </Box>
+        </Stack>
+        <Link to="/logout">logout</Link>
+
       </Stack>
-    </Box>
+    </Paper>
   )
 }

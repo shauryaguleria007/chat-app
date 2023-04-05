@@ -34,6 +34,7 @@ export const Contacts = () => {
         height: `${box?.current?.offsetHeight}px`,
         px: 4,
       }}
+        elevation={3}
       >
 
 
@@ -89,7 +90,8 @@ const Contact = ({ res }) => {
           ,
           backgroundColor: `${userChat === res._id ? "rgba(128, 128, 128, 0.125)" : "none"}`
         }}
-          variant="string"
+          variant={`${userChat === res._id ? "elevation" : "string"}`}
+          elevation={1}
         >
           <CardHeader avatar={
             <Badge color="secondary"
