@@ -4,10 +4,13 @@ import { useSocketContext } from "../../contexrt/SocketContext"
 import { useComponentContext } from '../../contexrt/ComponentContect'
 import { Link } from "react-router-dom"
 import SendIcon from '@mui/icons-material/Send';
+import { getUser } from '../../app/store'
+import ImageIcon from '@mui/icons-material/Image';
 
 
 import { useParams } from 'react-router-dom'
 export const MessageBox = () => {
+  const user = getUser()
   const messsageDiv = useRef()
   const { userChat } = useParams()
   const { sendMessage } = useSocketContext()
@@ -17,7 +20,8 @@ export const MessageBox = () => {
     if (messsageDiv?.current?.value === "") return
     sendMessage({
       message: messsageDiv?.current?.value,
-      to: userChat
+      to: userChat,
+      type:"text"
     })
     messsageDiv.current.value = ""
   }
@@ -32,7 +36,7 @@ export const MessageBox = () => {
       width: "100%",
       height: "15%"
     }}
-variant="outlined"
+      variant="outlined"
     >
       <Stack sx={{
         height: 1,
@@ -53,17 +57,25 @@ variant="outlined"
         <Stack component="form"
           onSubmit={formSubmit}
           direction={"row"}
+          gap={1}
         >
           <TextField
             size="small"
             inputRef={messsageDiv}
             variant="standard"
-            placeholder='message'
+            placeholder={`message get name s`}
           />
           <Box>
             <IconButton vartiant="contained" type="submit">
               <SendIcon />
             </IconButton>
+          </Box>
+          <Box>
+            <Link to={`/image/${userChat}`} style={{
+              textDecoration: "none"
+            }} > <IconButton >
+                <ImageIcon />
+              </IconButton></Link>
           </Box>
         </Stack>
         <Link to="/logout">logout</Link>

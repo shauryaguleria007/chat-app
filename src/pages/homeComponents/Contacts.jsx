@@ -24,6 +24,7 @@ export const Contacts = () => {
       "& ::-webkit-scrollbar": {
         display: "none"
       },
+      height: 1
     }}
       ref={box}
     >
@@ -83,12 +84,13 @@ const Contact = ({ res }) => {
       }}>
 
         <Card sx={{
-          width: "100%",
+          width: "85%",
           ":hover": {
             backgroundColor: `${userChat === res._id ? "none" : "rgba(255, 192, 203, 0.2)"}`
           }
           ,
-          backgroundColor: `${userChat === res._id ? "rgba(128, 128, 128, 0.125)" : "none"}`
+          backgroundColor: `${userChat === res._id ? "rgba(128, 128, 128, 0.125)" : "none"}`,
+          mx: "auto"
         }}
           variant={`${userChat === res._id ? "elevation" : "string"}`}
           elevation={1}
@@ -106,11 +108,12 @@ const Contact = ({ res }) => {
           }
             title={res?.name}
             subheader={"online "}
+            action={
+              <IconButton>
+                <MoreVert />
+              </IconButton>}
           />
         </Card></Link>
-      <IconButton>
-        <MoreVert />
-      </IconButton>
     </Stack>
   </>
 }

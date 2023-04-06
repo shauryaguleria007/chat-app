@@ -22,7 +22,7 @@ export const Navbar = () => {
     //     y: 0,
     //     z: 0
     // })
-    const {displaySearch, setDisplaySearch } = useComponentContext()
+    const { displaySearch, setDisplaySearch } = useComponentContext()
     const [searchUser, { error, isFetching, data }] = useFindUserMutation()
 
     useEffect(() => {
@@ -95,6 +95,7 @@ export const Navbar = () => {
             />
 
             <Avatar sx={{
+
             }} src={user?.avatarUrl} />
         </Toolbar>
     </AppBar>

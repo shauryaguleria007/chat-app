@@ -56,7 +56,7 @@ export const userSlice = createSlice({
 
         },
         addMessagesFromDataBase: (state, action) => {// basic needs optimazation
-            console.log(action.payload);
+            // console.log(action.payload);
           
         },
         resetNewMessages: (state, action) => {

@@ -20,9 +20,9 @@ export const ChatBox = () => {
     await getMessages({ id: user?.id, contact: userChat })
   }
 
-  useEffect(() => {
-    getData()
-  }, [])           //related to backup 
+  // useEffect(() => {
+  //   getData()
+  // }, [])           //related to backup 
 
 
   useEffect(() => {
@@ -46,26 +46,32 @@ export const ChatBox = () => {
 
 
   return (
-    <Paper sx={{
+    <Box sx={{
       // outline: "1px solid black",
       width: "100%",
       height: "85%"
-    }}
-      ref={box}
-      variant="outlined">
-      <Stack sx={{
-        overflowY: "scroll",
-        width: 1,
-        "::-webkit-scrollbar": {
-          display: "none"
-        },
-        height: `${box?.current?.offsetHeight}px`,
-      }}
-        gap={1}>
-        {contact?.messages?.map((res, index) => {
-          return <Message key={index} res={res} />
-        })}
-      </Stack >
-    </Paper >
+    }}>
+      <Paper
+        sx={{
+          height: 1,
+          width: 1
+        }}
+        ref={box}
+        variant="outlined">
+        <Stack sx={{
+          overflowY: "scroll",
+          width: 1,
+          "::-webkit-scrollbar": {
+            display: "none"
+          },
+          height: `${box?.current?.offsetHeight}px`,
+        }}
+          gap={1}>
+          {contact?.messages?.map((res, index) => {
+            return <Message key={index} res={res} />
+          })}
+        </Stack >
+      </Paper >
+    </Box>
   )
 }
