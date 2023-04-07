@@ -64,11 +64,11 @@ exports.getMessages = AsyncErrorHandler(async (req, res, next) => {
       $or: [{
         from: req.body.id,
         to: req.body.contact,
-        user: req.user._id
+        // user: req.user._id
       }, {
         to: req.body.id,
         from: req.body.contact,
-        user: req.user._id
+        // user: req.user._id 
       }]
     })
   if (!messages) throw new MessageError("")
