@@ -45,7 +45,7 @@ export const FileData = () => {
     const handleAddFile = async (e) => {
         e.preventDefault()
         Array.from(e.target.files).map(async (res) => {
-            if (res.type.match("image/*")) {
+            if (res.type.match("image/*")|| res.type.match("/*.mp4")) {
                 const url = await addUrl(res)
                 setfile((state) => {
                     state.push({ file: res, url })
