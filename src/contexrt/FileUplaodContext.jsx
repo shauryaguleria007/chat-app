@@ -7,9 +7,7 @@ export const FileUploadProvider = ({ children }) => {
     const [file, setfile] = useState([])
     const [showPreview, setPreview] = useState(false)
 
-    useEffect(() => {
-        console.log(file)
-    }, [file])
+
     return <FileUploadContext.Provider value={{
         file,
         setfile,

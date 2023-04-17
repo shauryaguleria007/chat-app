@@ -7,7 +7,8 @@ import { useFileUploadContext } from "../../contexrt/FileUplaodContext"
 import { FileData } from '../../components/chat/FileData';
 import { Preview } from "../../components/chat/Preview"
 export const SendImage = () => {
-    const { showPreview } = useFileUploadContext()
+    const { showPreview, setPreview, file } = useFileUploadContext()
+  
     if (showPreview) return <Preview />
     return <FileData />
 }
