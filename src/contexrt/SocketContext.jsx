@@ -1,7 +1,7 @@
 import { useContext, createContext, useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { getUser, getContacts } from "../app/store";
-import { addRecievedMessage, addUserMessages, addContact } from "../features/userSlice";
+import { addRecievedMessage, addUserMessages, addContact, updateOnlineStataus } from "../features/userSlice";
 import { useDispatch } from "react-redux";
 import { useAddContactMutation, useAddMessageMutation } from "../services/userApi";
 
@@ -37,12 +37,30 @@ export const SocketProvider = ({ children }) => {
         dispatch(addRecievedMessage(message))
     }
 
+
+    const status = (message) => {
+        dispatch(updateOnlineStataus(message))
+    }
+
     const sendMessage = async (message) => {
         const data = { from: user?.id, ...message, date: Date.now() }
         socket.current.emit("sendMessage", data)
         dispatch(addUserMessages(data))
         // await addNewMessage(data)
     }
+
+
+    useEffect(() => {
+        const getStatus = () => {
+            // if (!socketConnectionStatus) return
+            contacts.map((res) => {
+                socket.current.emit("getUserStatus", res._id)
+            })
+        }
+        getStatus()
+        const interval = setInterval(getStatus, 5000)
+        return () => clearInterval(interval)
+    }, [])
 
     useEffect(() => {
         if (!data) return
@@ -60,13 +78,16 @@ export const SocketProvider = ({ children }) => {
         socket.current.on("disconnect", disconnectFunction)
 
         socket.current.on("recieveMessage", recieveMessageFunction)
+        socket.current.on("onlineStatusResult", status)
         socket.current.connect()
 
         return () => {
             socket.current.off("connect", connectFunction)
             socket.current.off("recieveMessage", recieveMessageFunction),
                 socket.current.off("disconnect", disconnectFunction),
-                socket.current.disconnect()
+                socket.current.off("onlineStatusResult", status)
+
+            socket.current.disconnect()
         }
 
     }, [])

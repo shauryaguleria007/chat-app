@@ -20,7 +20,7 @@ export const userSlice = createSlice({
             let flag = false
             state.contacts.map((res) => { if (res?._id === action.payload?._id) flag = true })
             if (flag) return state
-            state.contacts.unshift({ ...action.payload, new: 0, messages: [] })
+            state.contacts.unshift({ ...action.payload, new: 0, online: false, messages: [] })
         },
         addUserMessages: (state, action) => {
             state.contacts.map((res) => {
@@ -55,9 +55,15 @@ export const userSlice = createSlice({
 
 
         },
+        updateOnlineStataus: (state, action) => {
+            console.log("here");
+            state.contacts.map((res) => {
+                if (res._id === action.payload.id) res.online = action.payload?.status
+            })
+        },
         addMessagesFromDataBase: (state, action) => {// basic needs optimazation
             // console.log(action.payload);
-          
+
         },
         resetNewMessages: (state, action) => {
             state.contacts.map((res) => {
@@ -67,5 +73,5 @@ export const userSlice = createSlice({
     }
 })
 
-export const { setUser, addContact, resetUser, addRecievedMessage, addUserMessages, resetNewMessages, addMessagesFromDataBase } = userSlice.actions
+export const { setUser, addContact, resetUser, addRecievedMessage, addUserMessages, resetNewMessages, addMessagesFromDataBase, updateOnlineStataus } = userSlice.actions
 export default userSlice.reducer

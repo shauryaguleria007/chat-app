@@ -107,7 +107,7 @@ const Contact = ({ res }) => {
             </Badge>
           }
             title={res?.name}
-            subheader={"online "}
+            subheader={res.online?"online":"offline"}
             action={
               <IconButton>
                 <MoreVert />
