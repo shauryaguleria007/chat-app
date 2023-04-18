@@ -3,7 +3,7 @@ const passport = require("passport")
 const redis = require("redis")
 
 const { useCustomStrategy } = require("../utils")
-const { getClientMessage } = require("./messageEvents")
+const { getClientMessage, sendStatusFunction } = require("./messageEvents")
 module.exports = async (httpServer) => {
     const socketServer = new Server(httpServer, {
         cors: `${process.env.client}`
@@ -47,6 +47,7 @@ module.exports = async (httpServer) => {
         await redisClient.DEL(socket.request.user.id)
 
         socket.on("sendMessage", (message) => getClientMessage(message, socketServer, redisClient))
+        socket.on("getUserStatus", (message) => sendStatusFunction(message,socket, socketServer, redisClient))
         socket.on("disconnect", async () => {
             await redisClient.del(`socket${socket.request.user.id}`)
             console.log(socket.request.user.email, "disconnected");
