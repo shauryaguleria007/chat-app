@@ -56,7 +56,6 @@ export const userSlice = createSlice({
 
         },
         updateOnlineStataus: (state, action) => {
-            console.log("here");
             state.contacts.map((res) => {
                 if (res._id === action.payload.id) res.online = action.payload?.status
             })

@@ -39,6 +39,7 @@ export const SocketProvider = ({ children }) => {
 
 
     const status = (message) => {
+        console.log(message);
         dispatch(updateOnlineStataus(message))
     }
 
@@ -52,7 +53,6 @@ export const SocketProvider = ({ children }) => {
 
     useEffect(() => {
         const getStatus = () => {
-            // if (!socketConnectionStatus) return
             contacts.map((res) => {
                 socket.current.emit("getUserStatus", res._id)
             })
@@ -60,7 +60,7 @@ export const SocketProvider = ({ children }) => {
         getStatus()
         const interval = setInterval(getStatus, 5000)
         return () => clearInterval(interval)
-    }, [])
+    }, [contacts])
 
     useEffect(() => {
         if (!data) return
