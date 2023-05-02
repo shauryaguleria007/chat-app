@@ -1,13 +1,22 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { useFileUploadContext } from '../../contexrt/FileUplaodContext'
 import { Box, Paper, Stack, Button, Grid, Card, CardMedia, CardHeader, IconButton } from "@mui/material"
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
+import { useSocketContext } from '../../contexrt/SocketContext';
+useSocketContext
 export const Preview = () => {
   const { file, setPreview } = useFileUploadContext()
+  const { sendFile } = useSocketContext()
+  const navigate = useNavigate()
   const { userChat } = useParams()
   const previewbox = useRef()
+  const [send, setSend] = useState(false)
+  useEffect(() => {
+    if (!send) return
+    sendFile({ file, to: userChat })
+    navigate(`/${userChat}`)
+  }, [send])
   return <>
     <Paper sx={{
       width: 1,
@@ -46,7 +55,7 @@ export const Preview = () => {
             >
               {file.map((res, index) => {
                 if (res.type === "image")
-                  return <PreviewImage res={res} key={index} />
+                  return <PreviewImage res={res} key={index} id={index} />
                 if (res.type === "video")
                   return <PreviewVideo res={res} key={index} />
               })}
@@ -59,17 +68,18 @@ export const Preview = () => {
           width: 1,
           justifyContent: "center"
         }}>
-          <Button variant="contained">SEND</Button>
+          <Button variant="contained" onClick={() => setSend(true)} > SEND</Button>
           <Button onClick={() => setPreview(false)}>Add More</Button>
 
         </Stack>
       </Stack>
-    </Paper>
+    </Paper >
   </>
 }
 
 
-const PreviewImage = ({ res }) => {
+const PreviewImage = ({ res, id }) => {
+  const { removeMedia } = useFileUploadContext()
   return <Grid item xs={4}>
     <Card sx={{
       width: 1,
@@ -77,7 +87,7 @@ const PreviewImage = ({ res }) => {
     }}>
       <CardHeader
         action={
-          <IconButton>
+          <IconButton onClick={() => removeMedia(id)}>
             <RemoveCircleOutlineIcon />
           </IconButton>
 
@@ -99,6 +109,7 @@ const PreviewImage = ({ res }) => {
 
 
 const PreviewVideo = ({ res }) => {
+  const { removeMedia } = useFileUploadContext()
   return <Grid item xs={4}>
     <Card sx={{
       width: 1,
@@ -106,7 +117,7 @@ const PreviewVideo = ({ res }) => {
     }}>
       <CardHeader
         action={
-          <IconButton>
+          <IconButton onClick={() => removeMedia(1)} >
             <RemoveCircleOutlineIcon />
           </IconButton>
 

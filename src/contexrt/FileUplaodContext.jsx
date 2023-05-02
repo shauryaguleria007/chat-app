@@ -7,12 +7,21 @@ export const FileUploadProvider = ({ children }) => {
     const [file, setfile] = useState([])
     const [showPreview, setPreview] = useState(false)
 
+    const removeMedia = (index) => {
+        setfile((res) => {
+            res.splice(index, 1)
+            return [...res]
+        })
+    }
+
+   
 
     return <FileUploadContext.Provider value={{
         file,
         setfile,
         showPreview,
-        setPreview
+        setPreview,
+        removeMedia
     }}>
         {children}
     </FileUploadContext.Provider>

@@ -1,7 +1,7 @@
 import { useContext, createContext, useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { getUser, getContacts } from "../app/store";
-import { addRecievedMessage, addUserMessages, addContact, updateOnlineStataus } from "../features/userSlice";
+import { addRecievedMessage, addUserMessages, addContact, updateOnlineStataus, addUserFile } from "../features/userSlice";
 import { useDispatch } from "react-redux";
 import { useAddContactMutation, useAddMessageMutation } from "../services/userApi";
 
@@ -39,7 +39,6 @@ export const SocketProvider = ({ children }) => {
 
 
     const status = (message) => {
-        console.log(message);
         dispatch(updateOnlineStataus(message))
     }
 
@@ -50,6 +49,15 @@ export const SocketProvider = ({ children }) => {
         // await addNewMessage(data)
     }
 
+    const sendFile = (file) => {
+        file.file.map((res) => {
+            //dispatch
+            const data = { type: res.type, url: res.url, to: file.to, from: user?.id, date: Date.now() }
+            dispatch(addUserFile(data))
+            socket.current.emit("sendMessage", data)
+            //emit
+        })
+    }
 
     useEffect(() => {
         const getStatus = () => {
@@ -93,7 +101,7 @@ export const SocketProvider = ({ children }) => {
     }, [])
 
 
-    return <SocketContext.Provider value={{ socket: socket.current, socketConnectionStatus, sendMessage }}>
+    return <SocketContext.Provider value={{ socket: socket.current, socketConnectionStatus, sendMessage, sendFile }}>
         {children}
     </SocketContext.Provider >
 }

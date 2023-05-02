@@ -29,6 +29,13 @@ export const userSlice = createSlice({
                 }
             })
         },
+        addUserFile: (state, action) => {
+            state.contacts.map((res) => {
+                if (res._id === action.payload.to) {
+                    res.messages.push({ ...action.payload, formServer: false })
+                }
+            })
+        },
         addRecievedMessage: (state, action) => {
             const message = { ...action.payload, formServer: false }
             state.contacts.map((res, location) => {
@@ -72,5 +79,15 @@ export const userSlice = createSlice({
     }
 })
 
-export const { setUser, addContact, resetUser, addRecievedMessage, addUserMessages, resetNewMessages, addMessagesFromDataBase, updateOnlineStataus } = userSlice.actions
+export const {
+    setUser,
+    addContact,
+    resetUser,
+    addRecievedMessage,
+    resetNewMessages,
+    addMessagesFromDataBase,
+    updateOnlineStataus,
+    addUserMessages,
+    addUserFile
+} = userSlice.actions
 export default userSlice.reducer
