@@ -3,10 +3,11 @@ const passport = require("passport")
 const redis = require("redis")
 
 const { useCustomStrategy } = require("../utils")
-const { getClientMessage, sendStatusFunction } = require("./messageEvents")
+const { getClientMessage, sendStatusFunction, recieveFile, sendFile } = require("./messageEvents")
 module.exports = async (httpServer) => {
     const socketServer = new Server(httpServer, {
         cors: `${process.env.client}`
+
     })
 
     const redisClient = redis.createClient({
@@ -45,12 +46,15 @@ module.exports = async (httpServer) => {
             getClientMessage(JSON.parse(send), socketServer, redisClient)
         })
         await redisClient.DEL(socket.request.user.id)
+        await sendFile(socket, socketServer, redisClient)
 
         socket.on("sendMessage", (message) => getClientMessage(message, socketServer, redisClient))
-        socket.on("getUserStatus", (message) => sendStatusFunction(message,socket, socketServer, redisClient))
+        socket.on("getUserStatus", (message) => sendStatusFunction(message, socket, socketServer, redisClient))
+        socket.on("fileUpload", (message) => recieveFile(message, socket, socketServer, redisClient))
         socket.on("disconnect", async () => {
             await redisClient.del(`socket${socket.request.user.id}`)
             console.log(socket.request.user.email, "disconnected");
+            //check for incompleet media 
         })
     })
 }
