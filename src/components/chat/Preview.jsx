@@ -57,7 +57,7 @@ export const Preview = () => {
                 if (res.type === "image")
                   return <PreviewImage res={res} key={index} id={index} />
                 if (res.type === "video")
-                  return <PreviewVideo res={res} key={index} />
+                  return <PreviewVideo res={res} key={index} id={index} />
               })}
             </Grid>
           </Box>
@@ -108,7 +108,7 @@ const PreviewImage = ({ res, id }) => {
 }
 
 
-const PreviewVideo = ({ res }) => {
+const PreviewVideo = ({ res, id }) => {
   const { removeMedia } = useFileUploadContext()
   return <Grid item xs={4}>
     <Card sx={{
@@ -117,12 +117,13 @@ const PreviewVideo = ({ res }) => {
     }}>
       <CardHeader
         action={
-          <IconButton onClick={() => removeMedia(1)} >
+          <IconButton onClick={() => removeMedia(id)} >
             <RemoveCircleOutlineIcon />
           </IconButton>
 
         }
       />
+
       <CardMedia
         component="video"
         image={res.url}

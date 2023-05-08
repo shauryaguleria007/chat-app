@@ -4,6 +4,7 @@ import { getUser, getContacts } from "../app/store";
 import { addRecievedMessage, addUserMessages, addContact, updateOnlineStataus, addUserFile } from "../features/userSlice";
 import { useDispatch } from "react-redux";
 import { useAddContactMutation, useAddMessageMutation } from "../services/userApi";
+import { v4 as uuidv4 } from 'uuid';
 
 
 
@@ -50,14 +51,40 @@ export const SocketProvider = ({ children }) => {
     }
 
     const sendFile = (file) => {
-        file.file.map((res) => {
-            //dispatch
-            const data = { type: res.type, url: res.url, to: file.to, from: user?.id, date: Date.now() }
+        file.file.map(async (res) => {
+            const id = uuidv4()
+            const data = { type: res.type, to: file.to, from: user?.id, date: Date.now(), file: res?.file }
             dispatch(addUserFile(data))
-            socket.current.emit("sendMessage", data)
-            //emit
+            const reader = new FileReader()
+            reader.onload = (event) => {
+                const arrayBuffer = event.target.result;
+                const chunkSize = 10000;
+                const numChunks = Math.ceil(arrayBuffer.byteLength / chunkSize);
+                for (let i = 0; i < numChunks; i++) {
+                    const start = i * chunkSize;
+                    const end = Math.min(start + chunkSize, arrayBuffer.byteLength);
+                    const chunk = arrayBuffer.slice(start, end);
+                    socket.current.emit('fileUpload', {
+                        chunk,
+                        fileName: res.file.name,
+                        index: i,
+                        lastIndex: numChunks - 1,
+                        type: res.type,
+                        to: file.to,
+                        from: user?.id,
+                        id
+                    });
+                }
+            }
+            reader.readAsArrayBuffer(res.file)
         })
     }
+
+
+    const recieveFile = (data) => {
+        console.log(data);
+    }
+
 
     useEffect(() => {
         const getStatus = () => {
@@ -87,6 +114,7 @@ export const SocketProvider = ({ children }) => {
 
         socket.current.on("recieveMessage", recieveMessageFunction)
         socket.current.on("onlineStatusResult", status)
+        socket.current.on("recieveFile", recieveFile)
         socket.current.connect()
 
         return () => {
@@ -94,7 +122,7 @@ export const SocketProvider = ({ children }) => {
             socket.current.off("recieveMessage", recieveMessageFunction),
                 socket.current.off("disconnect", disconnectFunction),
                 socket.current.off("onlineStatusResult", status)
-
+            socket.current.off("recieveFile", recieveFile)
             socket.current.disconnect()
         }
 

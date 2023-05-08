@@ -13,6 +13,8 @@ import { useComponentContext } from "./contexrt/ComponentContect"
 import { SocketProvider } from './contexrt/SocketContext'
 import { Chat } from "./pages/homeComponents/Chat"
 import { FileUploadProvider } from './contexrt/FileUplaodContext'
+import { v4 as uuidv4 } from 'uuid';
+
 function App() {
   const { warning } = useComponentContext()
   return (
