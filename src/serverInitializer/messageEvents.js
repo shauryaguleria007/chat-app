@@ -32,7 +32,8 @@ exports.recieveFile = async (message, socket, socketServer, redisClient) => {
             chunk: message.chunk,
             index: message.index,
             lastIndex: message.lastIndex,
-            fileName: message.fileName
+            fileName: message.fileName,
+            type: message.type
         })}`
     }, (error, reply) => {
     });
