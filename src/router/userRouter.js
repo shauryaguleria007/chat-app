@@ -1,5 +1,6 @@
 const express = require('express')
 const { check } = require('express-validator')
+<<<<<<< HEAD
 const multer = require("multer")
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
@@ -29,6 +30,13 @@ const upload = multer({ storage: storage })
 
 
 
+=======
+
+const { createUser, findUser, addContact, addMessage, getMessages } = require('../controller')
+const { routeValidator } = require('../middleware')
+const passport = require("passport")
+
+>>>>>>> 48a51206b96a129635118c55a560445ead400ecf
 const Router = express.Router()
 
 Router.route('/register').post(
@@ -45,9 +53,12 @@ Router.route("/findUser").post(passport.authenticate("jwt", { session: false }),
 Router.route("/addContact").post(passport.authenticate("jwt", { session: false }), addContact)
 Router.route("/addMessage").post(passport.authenticate("jwt", { session: false }), addMessage)
 Router.route("/getMessages").post(passport.authenticate("jwt", { session: false }), getMessages)
+<<<<<<< HEAD
 Router.route("/addFile").post(passport.authenticate("jwt", { session: false }),upload.single("file"),  addFile)
 Router.route("/getFile").post(passport.authenticate("jwt", { session: false }), getFile)
 
+=======
+>>>>>>> 48a51206b96a129635118c55a560445ead400ecf
 
 
 
