@@ -3,6 +3,8 @@ const Message = require("../modal/messageModal")
 const { AsyncErrorHandler, customError, verificatoinError, MessageError } = require('../utils')
 const jwt = require("jsonwebtoken")
 const mongoose = require("mongoose")
+const cloudinary = require('cloudinary');
+const fs = require("fs")
 exports.createUser = AsyncErrorHandler(async (req, res, next) => {
   const { email, password, name } = req.body
 
@@ -14,6 +16,7 @@ exports.createUser = AsyncErrorHandler(async (req, res, next) => {
       email: insertUser.email,
       name: insertUser.name,
     },
+
     process.env.JWT,
     { expiresIn: '1d' }
   )
@@ -47,44 +50,30 @@ exports.addContact = AsyncErrorHandler(async (req, res, next) => {
 })
 
 
-exports.addFile = AsyncErrorHandler(async (req, res, next) => { res.json({ success: true }) })
+exports.addFile = AsyncErrorHandler(async (req, res, next) => {
+  const data = JSON.parse(req.body.json)
+  console.log(data);
+  // const uploadOptions = {
+  //   folder: 'project',
+  //   type: 'private',
+  //   upload_preset: 'your_upload_preset_name',
+
+  // };
+  // const upload = await cloudinary.v2.uploader.upload(req.file.path, uploadOptions);
+  // console.log(upload);
+  // fs.unlink(req.file.path, () => { })
+  res.json({ file: req.file.filename })
+})
 exports.getFile = AsyncErrorHandler(async (req, res, next) => { res.json({ success: true }) })
 
 
 
-exports.addMessage = AsyncErrorHandler(async (req, res, next) => {
-
-  res.json({ send: true })
-})
-
 exports.getMessages = AsyncErrorHandler(async (req, res, next) => {
   res.json({ send: true })
 })
 
 exports.addMessage = AsyncErrorHandler(async (req, res, next) => {
-  const { from, to, message, date } = req.body
-  const userOne = await User.findById(from)
-  const userTwo = await User.findById(to)
-  if (!userOne || !userTwo) throw new MessageError("sf")
-  const data = await Message.create({ message, from, to, date, user: req.user._id })
 
-  if (!data) throw new MessageError("")
-  res.json(data)
+  res.json({ data: true })
 })
 
-exports.getMessages = AsyncErrorHandler(async (req, res, next) => {
-  const messages = await Message.find(
-    {
-      $or: [{
-        from: req.body.id,
-        to: req.body.contact,
-        // user: req.user._id
-      }, {
-        to: req.body.id,
-        from: req.body.contact,
-        // user: req.user._id 
-      }]
-    })
-  if (!messages) throw new MessageError("")
-  res.json(messages)
-})
