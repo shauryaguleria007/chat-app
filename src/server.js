@@ -2,10 +2,13 @@ require('dotenv').config()
 
 const express = require('express')
 const mongoose = require('mongoose')
+const http = require("http")
 
-const { expressServer } = require('../src/utils')
+const expressServer = require('./serverInitializer/expressServer')
+const socketServer = require("./serverInitializer/socketServer")
 
 const server = express()
+const httpServer = http.createServer(server)
 
 const connnectDatabase = async () => {
   const database = await mongoose
@@ -17,18 +20,12 @@ const connnectDatabase = async () => {
     .catch((error) => {
       console.log('database not connected \n', 'error :  ' + error.message) //delete
     })
-  return database
 }
+connnectDatabase()
 
-const initiliazeServer = async () => {
-  const database = await connnectDatabase()
-  if (!database) {
-    console.log('server not initialized ')
-    return
-  }
-  expressServer(server)
-}
-initiliazeServer()
-server.listen(process.env.PORT, () => {
+expressServer(server)
+socketServer(httpServer)
+
+httpServer.listen(process.env.PORT, () => {
   console.log('server listening at port 3000')
 })
