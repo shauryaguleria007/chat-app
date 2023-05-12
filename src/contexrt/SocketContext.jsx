@@ -3,8 +3,9 @@ import { io } from "socket.io-client";
 import { getUser, getContacts } from "../app/store";
 import { addRecievedMessage, addUserMessages, addContact, updateOnlineStataus, addUserFile } from "../features/userSlice";
 import { useDispatch } from "react-redux";
-import { useAddContactMutation, useAddMessageMutation } from "../services/userApi";
+import { useAddContactMutation, useAddMessageMutation, useAddFileMutation } from "../services/userApi";
 import { v4 as uuidv4 } from 'uuid';
+import { Login } from "@mui/icons-material";
 
 
 
@@ -18,6 +19,7 @@ export const SocketProvider = ({ children }) => {
     const [socketConnectionStatus, setSocketConnectionStatus] = useState(true)
     const contacts = getContacts()
     const [addNewContact, { data, isFerching, error }] = useAddContactMutation()
+    const [callAddFile, { data: fileData, error: fileError }] = useAddFileMutation()
     const [addNewMessage] = useAddMessageMutation()
 
     const socket = useRef(io(`${import.meta.env.VITE_SERVER}`, {
@@ -50,41 +52,25 @@ export const SocketProvider = ({ children }) => {
         // await addNewMessage(data)
     }
 
-    const sendFile = (file) => {
+    const sendFile = async (file) => {
         file.file.map(async (res) => {
             const id = uuidv4()
-            const data = { type: res.type, to: file.to, from: user?.id, date: Date.now(), file: res?.file }
-            dispatch(addUserFile(data))
-            const reader = new FileReader()
-            reader.onload = (event) => {
-                const arrayBuffer = event.target.result;
-                const chunkSize = 10000;
-                const numChunks = Math.ceil(arrayBuffer.byteLength / chunkSize);
-                for (let i = 0; i < numChunks; i++) {
-                    const start = i * chunkSize;
-                    const end = Math.min(start + chunkSize, arrayBuffer.byteLength);
-                    const chunk = arrayBuffer.slice(start, end);
-                    socket.current.emit('fileUpload', {
-                        chunk,
-                        fileName: res.file.name,
-                        index: i,
-                        lastIndex: numChunks - 1,
-                        type: res.type,
-                        to: file.to,
-                        from: user?.id,
-                        id
-                    });
-                }
-            }
-            reader.readAsArrayBuffer(res.file)
+            const data = { type: res.type, to: file.to, from: user?.id, date: Date.now() }
+            dispatch(addUserFile({ ...data, file: res?.file }))
+            const formData = new FormData()
+            formData.append("file", res?.file)
+            formData.append("json", JSON.stringify(data))
+            await callAddFile(formData)
+            //res.file
         })
     }
 
 
-    const recieveFile = (data) => {
-        console.log(data);
-    }
 
+    useEffect(() => {
+        if (fileData) console.log(fileData);
+        if (fileError) console.log(fileError);
+    }, [fileData, fileError])// delete
 
     useEffect(() => {
         const getStatus = () => {
@@ -114,7 +100,6 @@ export const SocketProvider = ({ children }) => {
 
         socket.current.on("recieveMessage", recieveMessageFunction)
         socket.current.on("onlineStatusResult", status)
-        socket.current.on("recieveFile", recieveFile)
         socket.current.connect()
 
         return () => {
@@ -122,7 +107,6 @@ export const SocketProvider = ({ children }) => {
             socket.current.off("recieveMessage", recieveMessageFunction),
                 socket.current.off("disconnect", disconnectFunction),
                 socket.current.off("onlineStatusResult", status)
-            socket.current.off("recieveFile", recieveFile)
             socket.current.disconnect()
         }
 

@@ -30,11 +30,12 @@ export const FileData = () => {
     const handleDrop = async (e) => {
         e.preventDefault()
         Array.from(e.dataTransfer.files).map(async (res) => {
-            if (res.type.match("image/*")) {
+            if (res.type.match("image/*") || res.type.match("/*.mp4")) {
                 const url = await addUrl(res)
+                console.log(res.type);
                 setfile((state) => {
                     state.push({
-                        file: res, url, type: `${res.type.match("image/*") ? "image" : "video"}`
+                        file: res, url, type: res.type
                     })
                     return [...state]
                 })
@@ -48,10 +49,12 @@ export const FileData = () => {
         e.preventDefault()
         Array.from(e.target.files).map(async (res) => {
             if (res.type.match("image/*") || res.type.match("/*.mp4")) {
+                console.log(res.type);
+
                 const url = await addUrl(res)
                 setfile((state) => {
                     state.push({
-                        file: res, url, type: `${res.type.match("image/*") ? "image" : "video"}`
+                        file: res, url, type: res.type
                     })
                     return [...state]
                 })

@@ -39,6 +39,13 @@ const authApi = createApi({
             keepUnusedDataFor: 0.001
 
         }),
+        addFile: builder.mutation({
+            query: (body) => ({
+                url: "/addFile",
+                method: "POST",
+                body
+            })
+        }),
         addMessage: builder.mutation({// backup
             query: (body) => ({
                 url: "/addMessage",
@@ -59,4 +66,4 @@ const authApi = createApi({
 })
 
 export default authApi
-export const { useRegisterMutation, useFindUserMutation, useAddContactMutation, useAddMessageMutation, useGetMessagesMutation } = authApi
+export const { useRegisterMutation, useFindUserMutation, useAddContactMutation, useAddMessageMutation, useGetMessagesMutation, useAddFileMutation } = authApi

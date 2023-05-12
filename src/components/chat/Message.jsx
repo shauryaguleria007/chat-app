@@ -66,7 +66,7 @@ export const Message = ({ res }) => {
     </Box>
 
 
-    if (res.from === userChat && res.type === "image") {
+    if (res.from === userChat && res.type === "image/png") {
         return <Box ref={scroll} sx={{
             alignSelf: "flex-start",
             mx: "15%",
@@ -95,7 +95,7 @@ export const Message = ({ res }) => {
         </Box>
     }
 
-    if (res.type === "image") {
+    if (res.type === "image/png") {
         return <Box ref={scroll} sx={{
             alignSelf: "flex-end",
             mx: "15%",
@@ -124,7 +124,7 @@ export const Message = ({ res }) => {
 
 
 
-    if (res.from === userChat && res.type === "video") {
+    if (res.from === userChat && res.type === "video/mp4") {
         return <Box ref={scroll} sx={{
             alignSelf: "flex-start",
             mx: "15%",
@@ -159,7 +159,7 @@ export const Message = ({ res }) => {
         </Box>
     }
 
-    if (res.type === "video") {
+    if (res.type === "video/mp4") {
         return <Box ref={scroll} sx={{
             alignSelf: "flex-end",
             mx: "15%",

@@ -54,9 +54,9 @@ export const Preview = () => {
               rowSpacing={3}
             >
               {file.map((res, index) => {
-                if (res.type === "image")
+                if (res.type === "image/png")
                   return <PreviewImage res={res} key={index} id={index} />
-                if (res.type === "video")
+                if (res.type === "video/mp4")
                   return <PreviewVideo res={res} key={index} id={index} />
               })}
             </Grid>
