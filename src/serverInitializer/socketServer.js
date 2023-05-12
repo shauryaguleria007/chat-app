@@ -3,11 +3,7 @@ const passport = require("passport")
 const redis = require("redis")
 
 const { useCustomStrategy } = require("../utils")
-<<<<<<< HEAD
 const { getClientMessage, sendStatusFunction } = require("./messageEvents")
-=======
-const { getClientMessage, sendStatusFunction, recieveFile, sendFile } = require("./messageEvents")
->>>>>>> 48a51206b96a129635118c55a560445ead400ecf
 module.exports = async (httpServer) => {
     const socketServer = new Server(httpServer, {
         cors: `${process.env.client}`
@@ -49,20 +45,11 @@ module.exports = async (httpServer) => {
         offlineDadta.map((send) => {
             getClientMessage(JSON.parse(send), socketServer, redisClient)
         })
-<<<<<<< HEAD
 
         await redisClient.DEL(socket.request.user.id)
 
         socket.on("sendMessage", (message) => getClientMessage(message, socketServer, redisClient))
         socket.on("getUserStatus", (message) => sendStatusFunction(message, socket, socketServer, redisClient))
-=======
-        await redisClient.DEL(socket.request.user.id)
-        await sendFile(socket, socketServer, redisClient)
-
-        socket.on("sendMessage", (message) => getClientMessage(message, socketServer, redisClient))
-        socket.on("getUserStatus", (message) => sendStatusFunction(message, socket, socketServer, redisClient))
-        socket.on("fileUpload", (message) => recieveFile(message, socket, socketServer, redisClient))
->>>>>>> 48a51206b96a129635118c55a560445ead400ecf
         socket.on("disconnect", async () => {
             await redisClient.del(`socket${socket.request.user.id}`)
             console.log(socket.request.user.email, "disconnected");

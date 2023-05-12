@@ -47,7 +47,6 @@ exports.addContact = AsyncErrorHandler(async (req, res, next) => {
 })
 
 
-<<<<<<< HEAD
 exports.addFile = AsyncErrorHandler(async (req, res, next) => { res.json({ success: true }) })
 exports.getFile = AsyncErrorHandler(async (req, res, next) => { res.json({ success: true }) })
 
@@ -60,8 +59,8 @@ exports.addMessage = AsyncErrorHandler(async (req, res, next) => {
 
 exports.getMessages = AsyncErrorHandler(async (req, res, next) => {
   res.json({ send: true })
+})
 
-=======
 exports.addMessage = AsyncErrorHandler(async (req, res, next) => {
   const { from, to, message, date } = req.body
   const userOne = await User.findById(from)
@@ -88,5 +87,4 @@ exports.getMessages = AsyncErrorHandler(async (req, res, next) => {
     })
   if (!messages) throw new MessageError("")
   res.json(messages)
->>>>>>> 48a51206b96a129635118c55a560445ead400ecf
 })
