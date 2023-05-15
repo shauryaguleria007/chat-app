@@ -2,9 +2,11 @@ const User = require('../modal/userModal')
 const Message = require("../modal/messageModal")
 const { AsyncErrorHandler, customError, verificatoinError, MessageError } = require('../utils')
 const jwt = require("jsonwebtoken")
-const mongoose = require("mongoose")
-const cloudinary = require('cloudinary');
-const fs = require("fs")
+const File = require("../modal/fileModal")
+const { default: mongoose } = require('mongoose')
+
+
+
 exports.createUser = AsyncErrorHandler(async (req, res, next) => {
   const { email, password, name } = req.body
 
@@ -52,18 +54,25 @@ exports.addContact = AsyncErrorHandler(async (req, res, next) => {
 
 exports.addFile = AsyncErrorHandler(async (req, res, next) => {
   const data = JSON.parse(req.body.json)
-  console.log(data);
-  // const uploadOptions = {
-  //   folder: 'project',
-  //   type: 'private',
-  //   upload_preset: 'your_upload_preset_name',
+  const file = await File.create({
+    fileId: req.file.id,
+    from: mongoose.Types.ObjectId(data.from),
+    to: mongoose.Types.ObjectId(data.to)
+  },
 
-  // };
-  // const upload = await cloudinary.v2.uploader.upload(req.file.path, uploadOptions);
-  // console.log(upload);
-  // fs.unlink(req.file.path, () => { })
-  res.json({ file: req.file.filename })
+  )
+  res.json({
+    from: data.from,
+    to: data.to,
+    type: data.type,
+    date: data.date,
+    file: file.id
+
+  })
 })
+
+
+
 exports.getFile = AsyncErrorHandler(async (req, res, next) => { res.json({ success: true }) })
 
 

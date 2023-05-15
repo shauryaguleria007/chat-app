@@ -53,7 +53,6 @@ module.exports = async (httpServer) => {
         socket.on("disconnect", async () => {
             await redisClient.del(`socket${socket.request.user.id}`)
             console.log(socket.request.user.email, "disconnected");
-            //check for incompleet media 
         })
     })
 }
