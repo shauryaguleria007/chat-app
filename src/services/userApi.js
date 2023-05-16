@@ -44,7 +44,29 @@ const authApi = createApi({
                 url: "/addFile",
                 method: "POST",
                 body
-            })
+            }),
+            keepUnusedDataFor: 0.001,
+
+        }),
+        getFile: builder.mutation({
+            query: (body) => ({
+                url: "/getFile",
+                method: "post",
+                body,
+                responseHandler: (response) => response.blob().then(async (blob) => {
+                    // const addUrl = async (res) => {
+                    //     return new Promise((resolve, reject) => {
+                    //         const reader = new FileReader()
+                    //         reader.addEventListener("load", () => {
+                    //             resolve(reader.result)
+                    //         })
+                    //         if (res) reader.readAsDataURL(res);
+                    //     })
+                    // }
+                    // const url = await addUrl(blob)
+                    return { blob }
+                })
+            }),
         }),
         addMessage: builder.mutation({// backup
             query: (body) => ({
@@ -66,4 +88,4 @@ const authApi = createApi({
 })
 
 export default authApi
-export const { useRegisterMutation, useFindUserMutation, useAddContactMutation, useAddMessageMutation, useGetMessagesMutation, useAddFileMutation } = authApi
+export const { useRegisterMutation, useFindUserMutation, useAddContactMutation, useAddMessageMutation, useGetMessagesMutation, useAddFileMutation, useGetFileMutation } = authApi

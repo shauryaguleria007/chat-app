@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 import { getUser, getContacts } from "../app/store";
 import { addRecievedMessage, addUserMessages, addContact, updateOnlineStataus, addUserFile } from "../features/userSlice";
 import { useDispatch } from "react-redux";
-import { useAddContactMutation, useAddMessageMutation, useAddFileMutation } from "../services/userApi";
+import { useAddContactMutation, useAddFileMutation } from "../services/userApi";
 import { v4 as uuidv4 } from 'uuid';
 import { Login } from "@mui/icons-material";
 
@@ -20,7 +20,6 @@ export const SocketProvider = ({ children }) => {
     const contacts = getContacts()
     const [addNewContact, { data, isFerching, error }] = useAddContactMutation()
     const [callAddFile, { data: fileData, error: fileError }] = useAddFileMutation()
-    const [addNewMessage] = useAddMessageMutation()
 
     const socket = useRef(io(`${import.meta.env.VITE_SERVER}`, {
         autoConnect: false,
@@ -53,24 +52,20 @@ export const SocketProvider = ({ children }) => {
     }
 
     const sendFile = async (file) => {
-        file.file.map(async (res) => {
+        const promises = file.file.map(async (res) => {
             const id = uuidv4()
-            const data = { type: res.type, to: file.to, from: user?.id, date: Date.now() }
+            const data = { type: res.type, to: file.to, from: user?.id, date: Date.now(), fromServer: false }
             dispatch(addUserFile({ ...data, file: res?.file }))
             const formData = new FormData()
             formData.append("file", res?.file)
             formData.append("json", JSON.stringify(data))
-            await callAddFile(formData)
-            //res.file
+            const response = await callAddFile(formData)
+            if (response.data) socket.current.emit("sendMessage", response.data)
         })
+        await Promise.all(promises)
     }
 
 
-
-    useEffect(() => {
-        if (fileData) console.log(fileData);
-        if (fileError) console.log(fileError);
-    }, [fileData, fileError])// delete
 
     useEffect(() => {
         const getStatus = () => {
