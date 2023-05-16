@@ -27,17 +27,7 @@ const storage = new GridFsStorage({
 });
 
 
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, 'src/files/')
-//   },
-//   filename: (req, file, cb) => {
-//     const uniqueFileName = uuidv4(); // Generate a unique UUID
-//     const fileExtension = path.extname(file.originalname); // Get the original file extension
-//     const customFileName = uniqueFileName + fileExtension;
-//     cb(null, customFileName)
-//   },
-// })
+
 const upload = multer({ storage: storage })
 
 

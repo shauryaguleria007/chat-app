@@ -4,6 +4,7 @@ const { AsyncErrorHandler, customError, verificatoinError, MessageError } = requ
 const jwt = require("jsonwebtoken")
 const File = require("../modal/fileModal")
 const { default: mongoose } = require('mongoose')
+const getGfs = require("../db").getGfs
 
 
 
@@ -66,14 +67,20 @@ exports.addFile = AsyncErrorHandler(async (req, res, next) => {
     to: data.to,
     type: data.type,
     date: data.date,
-    file: file.id
-
+    file: file.fileId,
+    fromServer: true,
   })
 })
 
 
 
-exports.getFile = AsyncErrorHandler(async (req, res, next) => { res.json({ success: true }) })
+exports.getFile = AsyncErrorHandler(async (req, res, next) => {
+  const gfs = getGfs()
+  console.log(req.body.id);
+  await gfs.find({ id: mongoose.Types.ObjectId(req.body.id) }).toArray((err, files) => {
+    if (files) gfs.openDownloadStream(mongoose.Types.ObjectId(req.body.id)).pipe(res);
+  })
+})
 
 
 

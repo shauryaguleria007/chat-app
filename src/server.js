@@ -14,8 +14,8 @@ server.use(methodOverride('_method'));
 
 const httpServer = http.createServer(server)
 
+ connnectDatabase()
 
-connnectDatabase()
 
 expressServer(server)
 socketServer(httpServer)
