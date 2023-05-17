@@ -67,6 +67,8 @@ const authApi = createApi({
                     return { blob }
                 })
             }),
+            keepUnusedDataFor: 0.001,
+
         }),
         addMessage: builder.mutation({// backup
             query: (body) => ({

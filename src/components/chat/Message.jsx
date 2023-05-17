@@ -24,7 +24,6 @@ export const Message = ({ res }) => {
         scroll?.current?.scrollIntoView({ behaviour: "smooth" })
     }, [])
     useEffect(() => {
-        console.log(res);
 
         const callGetFile = async () => {
             await getFile({ id: res.file })
@@ -55,7 +54,6 @@ export const Message = ({ res }) => {
     }, [data, error])
 
 
-    useEffect(() => { console.log(url); }, [url])
 
     const scroll = useRef()
 
