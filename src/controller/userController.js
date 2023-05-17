@@ -60,8 +60,7 @@ exports.addFile = AsyncErrorHandler(async (req, res, next) => {
     from: mongoose.Types.ObjectId(data.from),
     to: mongoose.Types.ObjectId(data.to)
   },
-
-  )
+  ).catch(() => { })
   res.json({
     from: data.from,
     to: data.to,
@@ -91,7 +90,7 @@ exports.getFile = AsyncErrorHandler(async (req, res, next) => {
   })
 })
 
-
+exports.streamFile = AsyncErrorHandler(async (req, res, next) => { })
 
 exports.getMessages = AsyncErrorHandler(async (req, res, next) => {
   res.json({ send: true })
