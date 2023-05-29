@@ -4,7 +4,12 @@ import { Box, Paper, Stack, Button, Grid, Card, CardMedia, CardHeader, IconButto
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useSocketContext } from '../../contexrt/SocketContext';
-useSocketContext
+
+
+
+
+
+
 export const Preview = () => {
   const { file, setPreview } = useFileUploadContext()
   const { sendFile } = useSocketContext()
@@ -78,6 +83,7 @@ export const Preview = () => {
 }
 
 
+
 const PreviewImage = ({ res, id }) => {
   const { removeMedia } = useFileUploadContext()
   return <Grid item xs={4}>
@@ -110,6 +116,9 @@ const PreviewImage = ({ res, id }) => {
 
 const PreviewVideo = ({ res, id }) => {
   const { removeMedia } = useFileUploadContext()
+
+
+  
   return <Grid item xs={4}>
     <Card sx={{
       width: 1,

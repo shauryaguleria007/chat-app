@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Box, Stack, Paper, Avatar, Badge, Card, CardHeader, IconButton } from '@mui/material'
+import { Box, Stack, Paper, Avatar, Badge, Card, CardHeader, Typography, IconButton, Popover } from '@mui/material'
 import { useComponentContext } from '../../contexrt/ComponentContect'
 import { getContacts } from '../../app/store'
 import { Link, useParams } from 'react-router-dom'
-import { Contrast, MoreVert } from '@mui/icons-material'
+import { MoreVert, Delete } from '@mui/icons-material'
+
 
 export const Contacts = () => {
   const { showContacts } = useComponentContext()
@@ -56,17 +57,33 @@ const Contact = ({ res }) => {
   const { userChat } = useParams()
   const contacts = getContacts()
   const [newMessages, setNewMessages] = useState(0)
+  const [openPopOver, SetOpenPopOver] = useState(false)
+  const [id, setId] = useState(undefined)
+  const Anchor = useRef()
+
   const { displaySearch, setShowContacts } = useComponentContext()
 
 
-  const display = () => {
+  const display = (e) => {
+    if (e.target.closest("#options")) e.preventDefault()
     setShowContacts(false)
   }
+
+  const togglePopover = () => {
+    SetOpenPopOver(!openPopOver)
+  }
+
+
   useEffect(() => {
     contacts.map((singleContact) => {
       if (singleContact._id === res._id) setNewMessages(singleContact.new)
     })
   }, [contacts])
+  useEffect(() => {
+    setId(() => {
+      return open ? 'simple-popover' : undefined
+    })
+  }, [open])
 
   return <>
     <Stack sx={{
@@ -107,13 +124,40 @@ const Contact = ({ res }) => {
             </Badge>
           }
             title={res?.name}
-            subheader={res.online?"online":"offline"}
+            subheader={res.online ? "online" : "offline"}
             action={
-              <IconButton>
+              <IconButton id='options' aria-describedby={id} ref={Anchor} onClick={togglePopover} >
                 <MoreVert />
+                <Popover
+                  id={id}
+                  open={openPopOver}
+                  anchorEl={Anchor.current}
+                  // onClose={handleClose}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                >
+                  <Options />
+                </Popover>
               </IconButton>}
           />
         </Card></Link>
     </Stack>
   </>
+}
+
+const Options = () => {
+  return <Stack direction={"column"} gap={2} sx={{
+    my: 2,
+    mx: 5
+  }}>
+    <Stack direction="row" sx={{
+      alignItems: "center",
+      justifyContent: "center"
+    }}>
+      <IconButton> <Delete /></IconButton>
+      <Typography variant="body1">Delete</Typography>
+    </Stack>
+  </Stack>
 }
