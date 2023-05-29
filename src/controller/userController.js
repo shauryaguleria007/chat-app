@@ -75,7 +75,6 @@ exports.addFile = AsyncErrorHandler(async (req, res, next) => {
 
 exports.getFile = AsyncErrorHandler(async (req, res, next) => {
   const gfs = getGfs()
-  console.log(req.body.id);
   await gfs.find({ id: mongoose.Types.ObjectId(req.body.id) }).toArray((err, files) => {
     if (files) {
       const stream = gfs.openDownloadStream(mongoose.Types.ObjectId(req.body.id))
