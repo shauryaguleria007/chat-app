@@ -43,7 +43,7 @@ module.exports = async (httpServer) => {
             console.log(data);
         })
         offlineDadta.map((send) => {
-            getClientMessage(JSON.parse(send), socketServer, redisClient)
+            getClientMessage(JSON.parse(send), socketServer, redisClient,true)
         })
 
         await redisClient.DEL(socket.request.user.id)

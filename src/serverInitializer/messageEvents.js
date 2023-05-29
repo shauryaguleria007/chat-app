@@ -4,7 +4,7 @@ const path = require("path")
 const Message = require("../modal/messageModal")
 const fileLocation = "./src/files"
 
-exports.getClientMessage = async (message, socket, redisClient) => {
+exports.getClientMessage = async (message, socket, redisClient, cashed = false) => {
     const socketId = await redisClient.get(`socket${message.to}`)
     const uploadMessage = async () => {
         const upload = await Message.create({
@@ -13,8 +13,9 @@ exports.getClientMessage = async (message, socket, redisClient) => {
             to: message.to
         })
     }
-    uploadMessage()
+    if (!cashed) uploadMessage()
     if (socketId) {
+
         socket.to(socketId).emit("recieveMessage", message)
         return
     }
