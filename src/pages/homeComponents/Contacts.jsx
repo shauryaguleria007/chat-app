@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Box, Stack, Paper, Avatar, Badge, Card, CardHeader, Typography, IconButton, Popover } from '@mui/material'
+import { Box, Stack, Paper, Avatar, Badge, Card, CardHeader, Typography, Button,IconButton, Popover } from '@mui/material'
 import { useComponentContext } from '../../contexrt/ComponentContect'
 import { getContacts } from '../../app/store'
 import { Link, useParams } from 'react-router-dom'
 import { MoreVert, Delete } from '@mui/icons-material'
-
+import { useDeleteContactMutation } from '../../services/userApi'
 
 export const Contacts = () => {
   const { showContacts } = useComponentContext()
@@ -148,6 +148,15 @@ const Contact = ({ res }) => {
 }
 
 const Options = () => {
+  const [deleteContact, { data, isFetching, error }] = useDeleteContactMutation()
+  const { userChat } = useParams()
+  const runDelete = async () => {
+    await deleteContact({ contact: userChat })
+  }
+
+  useEffect(() => {
+    if (data) console.log(data);
+  }, [data])
   return <Stack direction={"column"} gap={2} sx={{
     my: 2,
     mx: 5
@@ -156,8 +165,10 @@ const Options = () => {
       alignItems: "center",
       justifyContent: "center"
     }}>
-      <IconButton> <Delete /></IconButton>
-      <Typography variant="body1">Delete</Typography>
+      <Button startIcon={<Delete />} variant='text' color='secondary' onClick={runDelete}> 
+        <Typography variant="body1">Delete</Typography>
+      </Button>
+
     </Stack>
   </Stack>
 }
