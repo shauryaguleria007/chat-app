@@ -29,6 +29,7 @@ exports.createUser = AsyncErrorHandler(async (req, res, next) => {
 })
 
 
+
 exports.findUser = AsyncErrorHandler(async (req, res, next) => {
   const result = await User.find({ email: req.body.id }).select("-mailToken")
   if (result.length === 0) throw new verificatoinError("")
@@ -51,6 +52,12 @@ exports.addContact = AsyncErrorHandler(async (req, res, next) => {
   await req.user.save()
   res.json({ user })
 })
+
+exports.deleteContact = AsyncErrorHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id)
+  res.json({ ...user })
+})
+
 
 
 exports.addFile = AsyncErrorHandler(async (req, res, next) => {
@@ -89,7 +96,6 @@ exports.getFile = AsyncErrorHandler(async (req, res, next) => {
   })
 })
 
-exports.streamFile = AsyncErrorHandler(async (req, res, next) => { })
 
 exports.getMessages = AsyncErrorHandler(async (req, res, next) => {
   res.json({ send: true })
@@ -99,4 +105,5 @@ exports.addMessage = AsyncErrorHandler(async (req, res, next) => {
 
   res.json({ data: true })
 })
+
 

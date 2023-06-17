@@ -7,7 +7,7 @@ const { GridFsStorage } = require('multer-gridfs-storage');
 
 
 
-const { createUser, findUser, addContact, addMessage, getMessages, addFile, getFile } = require('../controller')
+const { createUser, findUser, addContact, addMessage, getMessages, addFile, getFile, deleteContact } = require('../controller')
 const { routeValidator } = require('../middleware')
 const passport = require("passport")
 
@@ -45,6 +45,7 @@ Router.route('/register').post(
 
 Router.route("/findUser").post(passport.authenticate("jwt", { session: false }), findUser)
 Router.route("/addContact").post(passport.authenticate("jwt", { session: false }), addContact)
+Router.route("/deleteContact").post(passport.authenticate("jwt", { session: false }), deleteContact)
 Router.route("/addMessage").post(passport.authenticate("jwt", { session: false }), addMessage)
 Router.route("/getMessages").post(passport.authenticate("jwt", { session: false }), getMessages)
 Router.route("/addFile").post(passport.authenticate("jwt", { session: false }), upload.single("file"), addFile)

@@ -20,7 +20,7 @@ Router.route('/authenticate').get(
   passport.authenticate('jwt', { session: false }),
   emailVerifier,
   authenticate
-)
+);
 
 Router.route("/verify/:id").get(passport.authenticate("jwt", { session: false }), sendMail)
 Router.route("/verified/:id").get(passport.authenticate("jwt", { session: false }), verify)
